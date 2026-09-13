@@ -1,0 +1,53 @@
+{
+  "sample-cleanup.jpg": {
+    "width": 1600,
+    "height": 1200,
+    "alt": "Sample placeholder graphic in autumn brown and gold tones standing in for a seasonal cleanup photo",
+    "base": "sample-cleanup",
+    "sizes": [
+      640,
+      1024
+    ]
+  },
+  "sample-crew.jpg": {
+    "width": 1200,
+    "height": 1500,
+    "alt": "Sample placeholder graphic in slate blue tones, portrait orientation, standing in for a crew photo",
+    "base": "sample-crew",
+    "sizes": [
+      640,
+      1024
+    ]
+  },
+  "sample-hero.jpg": {
+    "width": 2000,
+    "height": 1333,
+    "alt": "Sample placeholder graphic in green tones with diagonal stripes standing in for a hero lawn photo",
+    "base": "sample-hero",
+    "sizes": [
+      640,
+      1024,
+      1920
+    ]
+  },
+  "sample-mowing.jpg": {
+    "width": 1600,
+    "height": 1200,
+    "alt": "Sample placeholder graphic in bright green tones standing in for a freshly mowed lawn photo",
+    "base": "sample-mowing",
+    "sizes": [
+      640,
+      1024
+    ]
+  },
+  "sample-mulch.jpg": {
+    "width": 1600,
+    "height": 1200,
+    "alt": "Sample placeholder graphic in brown tones standing in for a mulched landscape bed photo",
+    "base": "sample-mulch",
+    "sizes": [
+      640,
+      1024
+    ]
+  }
+}

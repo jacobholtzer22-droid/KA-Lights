@@ -5,6 +5,7 @@ import * as cheerio from 'cheerio'
 import rawConfig from '../site.config'
 import { CONTACT_ENDPOINT, HONEYPOT_FIELD, SCHEMA_TYPES, SLUG_REGEX, siteConfigSchema } from '../lib/config-schema'
 import { DESCRIPTION_MAX, DESCRIPTION_MIN, TITLE_MAX, TITLE_MIN } from './verify-limits'
+import { inspectLaunchState } from './launch-gate.mjs'
 
 /**
  * THE GATE. Runs after `next build` against the static output in ./out and
@@ -23,6 +24,8 @@ const CONTENT = path.join(ROOT, 'content')
 const CONFIG_FILE = path.join(ROOT, 'site.config.ts')
 const FORM_FILE = path.join(ROOT, 'components/ContactForm.tsx')
 const FORM_BASELINE = path.join(ROOT, 'scripts/contact-form.sha256')
+const INDEXING_FILE = path.join(ROOT, 'indexing.json')
+const PREVIEW = process.env.PREVIEW === '1'
 const VERIFY_SLUG_URL = 'https://www.alignandacquire.com/api/verify-slug'
 
 /** Identity markers of the shipped sample config. Any of these in the identity fields means the template is unfilled. */
@@ -95,6 +98,11 @@ interface Page {
   route: string
   html: string
   $: cheerio.CheerioAPI
+}
+
+/** Every prose or copy file in content/: MDX and the structured JSON page copy. */
+function contentFiles(): string[] {
+  return [...walk(CONTENT, '.mdx'), ...walk(CONTENT, '.json')].sort()
 }
 
 function routeFromFile(file: string): string {
@@ -196,7 +204,7 @@ async function run() {
       )
       if (sampleImages.length) problems.push(`config still references sample images: ${[...new Set(sampleImages)].join(', ')}`)
     }
-    for (const file of [CONFIG_FILE, ...walk(CONTENT, '.mdx')]) {
+    for (const file of [CONFIG_FILE, ...contentFiles()]) {
       const text = fs.readFileSync(file, 'utf8')
       for (const token of SAMPLE_TOKENS) {
         const idx = text.indexOf(token)
@@ -292,7 +300,7 @@ async function run() {
       { name: 'price', re: /\$\s?\d/g },
     ]
     const problems: string[] = []
-    for (const file of walk(CONTENT, '.mdx')) {
+    for (const file of contentFiles()) {
       const text = fs.readFileSync(file, 'utf8')
       for (const { name, re } of patterns) {
         for (const m of text.matchAll(re)) {
@@ -306,7 +314,7 @@ async function run() {
   // 8. No placeholder tokens.
   {
     const problems: string[] = []
-    const files = [...walk(CONTENT, '.mdx'), CONFIG_FILE]
+    const files = [...contentFiles(), CONFIG_FILE]
     for (const file of files) {
       const text = fs.readFileSync(file, 'utf8')
       for (const token of PLACEHOLDER_TOKENS) {
@@ -468,6 +476,56 @@ async function run() {
     record(17, 'every internal link resolves to a built route', problems.size === 0, [...problems].slice(0, 8).join('; '))
   }
 
+  // 18. Launch gate: provisional values, placeholders, search engine blocking.
+  {
+    const name = 'launch gate (no provisional values, placeholders, or noindex)'
+    const { blockers, errors } = inspectLaunchState(ROOT)
+    const summary = (items: { rule: string; where: string }[]) => items.slice(0, 6).map((i) => `${i.rule} at ${i.where}`).join('; ')
+    if (errors.length) record(18, name, false, `consistency errors: ${summary(errors)}`)
+    else if (blockers.length === 0) record(18, name, true, 'clear')
+    else if (PREVIEW) record(18, name, true, `BYPASSED by PREVIEW=1: ${blockers.length} launch blocker(s). Not deployable to production.`)
+    else record(18, name, false, `${blockers.length} launch blocker(s): ${summary(blockers)}`)
+  }
+
+  // 19. Built HTML robots meta matches indexing.json on every page.
+  {
+    const problems: string[] = []
+    let noindex: boolean | null = null
+    try {
+      const value: unknown = JSON.parse(fs.readFileSync(INDEXING_FILE, 'utf8')).noindex
+      if (typeof value === 'boolean') noindex = value
+      else problems.push('indexing.json "noindex" is not a boolean')
+    } catch {
+      problems.push('indexing.json missing or unreadable')
+    }
+    if (noindex !== null) {
+      for (const p of pages) {
+        const robots = (p.$('meta[name="robots"]').attr('content') ?? '').toLowerCase()
+        if (noindex && !robots.includes('noindex')) problems.push(`${p.route}: robots meta "${robots}" lacks noindex while indexing.json says noindex`)
+        if (!noindex && robots.includes('noindex')) problems.push(`${p.route}: robots meta "${robots}" still says noindex`)
+      }
+    }
+    record(19, 'robots meta on every page matches indexing.json', problems.length === 0, problems.length ? problems.slice(0, 8).join('; ') : `noindex=${noindex}`)
+  }
+
+  // 20. Lead form mode matches the build: never live in a preview, never disabled in production.
+  {
+    const problems: string[] = []
+    const seen: string[] = []
+    const formPages = pages.filter((p) => p.$(`form[data-endpoint="${CONTACT_ENDPOINT}"]`).length > 0)
+    if (formPages.length === 0) problems.push('no page renders the contact form')
+    for (const p of formPages) {
+      p.$(`form[data-endpoint="${CONTACT_ENDPOINT}"]`).each((_, el) => {
+        const mode = p.$(el).closest('[data-lead-form-mode]').attr('data-lead-form-mode')
+        if (!mode) problems.push(`${p.route}: contact form is not inside the LeadForm wrapper`)
+        else if (PREVIEW && mode !== 'preview-disabled') problems.push(`${p.route}: PREVIEW build, but the form is "${mode}" and would write live leads`)
+        else if (!PREVIEW && mode !== 'live') problems.push(`${p.route}: production build, but lead submission is still disabled ("${mode}")`)
+        else seen.push(`${p.route}=${mode}`)
+      })
+    }
+    record(20, PREVIEW ? 'lead form cannot POST in a preview build' : 'lead form POSTs in a production build', problems.length === 0, problems.length ? problems.join('; ') : seen.join(', '))
+  }
+
   // ---------- report ----------
   results.sort((a, b) => a.id - b.id)
   const nameWidth = Math.max(...results.map((r) => r.name.length))
@@ -484,7 +542,8 @@ async function run() {
     console.log(`FAILED: ${failed.map((f) => `#${f.id}`).join(', ')}. Do not deploy.`)
     process.exit(1)
   }
-  console.log('All checks passed.')
+  if (PREVIEW) console.log('All checks passed for a PREVIEW build. The launch gate was bypassed: NOT deployable to production.')
+  else console.log('All checks passed.')
 }
 
 run().catch((err) => {

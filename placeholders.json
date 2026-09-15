@@ -1,0 +1,68 @@
+{
+  "placeholders": [
+    {
+      "file": "placeholder-crew-1.jpg",
+      "status": "Placeholder"
+    },
+    {
+      "file": "placeholder-crew-2.jpg",
+      "status": "Placeholder"
+    },
+    {
+      "file": "placeholder-crew-3.jpg",
+      "status": "Placeholder"
+    },
+    {
+      "file": "placeholder-gallery-1.jpg",
+      "status": "Placeholder"
+    },
+    {
+      "file": "placeholder-gallery-2.jpg",
+      "status": "Placeholder"
+    },
+    {
+      "file": "placeholder-gallery-3.jpg",
+      "status": "Placeholder"
+    },
+    {
+      "file": "placeholder-gallery-4.jpg",
+      "status": "Placeholder"
+    },
+    {
+      "file": "placeholder-hero.jpg",
+      "status": "Placeholder"
+    },
+    {
+      "file": "placeholder-scene-christmas.jpg",
+      "status": "Placeholder"
+    },
+    {
+      "file": "placeholder-scene-cool-white.jpg",
+      "status": "Placeholder"
+    },
+    {
+      "file": "placeholder-scene-fourth-of-july.jpg",
+      "status": "Placeholder"
+    },
+    {
+      "file": "placeholder-scene-game-day.jpg",
+      "status": "Placeholder"
+    },
+    {
+      "file": "placeholder-scene-halloween.jpg",
+      "status": "Placeholder"
+    },
+    {
+      "file": "placeholder-scene-lights-off.jpg",
+      "status": "Placeholder"
+    },
+    {
+      "file": "placeholder-scene-party.jpg",
+      "status": "Placeholder"
+    },
+    {
+      "file": "placeholder-scene-warm-white.jpg",
+      "status": "Placeholder"
+    }
+  ]
+}

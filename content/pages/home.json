@@ -1,0 +1,102 @@
+{
+  "hero": {
+    "brandLine": {
+      "text": "Your home, in any color. Every night of the year.",
+      "highlight": "any color."
+    },
+    "lead": "Professionally installed, app-controlled, warm white for everyday and full color for any occasion.",
+    "trustLabels": [
+      "App-Controlled"
+    ]
+  },
+  "serviceAreas": {
+    "eyebrow": "Serving the Inland Empire"
+  },
+  "visualizer": {
+    "eyebrow": "Control it from your phone",
+    "heading": {
+      "text": "See your home in any color.",
+      "highlight": "any color"
+    },
+    "body": "Christmas tonight. Warm white tomorrow. Team colors this weekend. Tap a scene and the whole home changes. This is your Kalights system, every night of the year.",
+    "hint": "Tap a scene"
+  },
+  "features": {
+    "eyebrow": "Why permanent lighting",
+    "heading": "Brilliant nights.",
+    "headingSecondLine": "Zero effort.",
+    "cards": [
+      {
+        "icon": "ladder",
+        "title": "No More Ladders",
+        "body": null
+      },
+      {
+        "icon": "palette",
+        "title": "Any Color, Any Occasion",
+        "body": "Full RGB plus warm white. Perfect for holidays, game days, or everyday elegance."
+      },
+      {
+        "icon": "eye",
+        "title": null,
+        "body": null
+      },
+      {
+        "icon": "season",
+        "title": null,
+        "body": null
+      }
+    ]
+  },
+  "galleryTeaser": {
+    "heading": "Inland Empire's finest.",
+    "subheading": null,
+    "cta": "View Full Gallery"
+  },
+  "app": {
+    "heading": "Total control in your pocket.",
+    "body": null,
+    "bullets": []
+  },
+  "crew": {
+    "eyebrow": "Local & hands-on",
+    "heading": null,
+    "body": "Kalights is a local, hands-on Inland Empire team."
+  },
+  "process": {
+    "heading": "Seamless from start to finish.",
+    "steps": [
+      {
+        "title": null,
+        "body": null
+      },
+      {
+        "title": "Custom Design",
+        "body": "Tailored to your home's unique architecture and colors."
+      },
+      {
+        "title": "Professional Install",
+        "body": null
+      },
+      {
+        "title": null,
+        "body": null
+      }
+    ]
+  },
+  "difference": {
+    "eyebrow": "The Kalights difference",
+    "heading": null,
+    "headingSecondLine": null,
+    "paragraphs": [],
+    "labels": []
+  },
+  "quote": {
+    "heading": {
+      "text": "Ready to light up your home, year round?",
+      "highlight": "year round?"
+    },
+    "subheading": null,
+    "note": null
+  }
+}

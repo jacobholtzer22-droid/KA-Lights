@@ -29,44 +29,44 @@ export default async function PrivacyPolicyPage() {
   return (
     <>
       <JsonLd data={breadcrumbList(CRUMBS)} />
-      <PageHeader title="Privacy Policy" crumbs={CRUMBS} />
-      <article className="prose-custom mx-auto max-w-3xl px-4 pt-6 text-base leading-relaxed text-ink sm:px-6">
+      <PageHeader title="Privacy Policy" />
+      <article className="mx-auto max-w-3xl px-4 pb-16 text-step-0 leading-relaxed text-ink-soft lg:px-8">
         {extra?.content}
 
-        <h2 className="mt-10 font-heading text-2xl font-bold text-primary-dark">Who we are</h2>
+        <h2 className="mt-10 font-heading text-2xl font-bold text-ink">Who we are</h2>
         <p className="mt-4">
           This website, {host}, is operated by {config.legalName} (&quot;{config.displayName}&quot;). This policy explains what
           information the site collects and how it is used.
         </p>
 
-        <h2 className="mt-10 font-heading text-2xl font-bold text-primary-dark">Information you send us</h2>
+        <h2 className="mt-10 font-heading text-2xl font-bold text-ink">Information you send us</h2>
         <p className="mt-4">
           When you submit the contact form, we receive the name, phone number, email address, and message you enter, along
           with basic technical details such as your IP address and browser type. We use this information to respond to your
           request, prepare a quote, and schedule work. We do not sell it.
         </p>
 
-        <h2 className="mt-10 font-heading text-2xl font-bold text-primary-dark">Text messages</h2>
+        <h2 className="mt-10 font-heading text-2xl font-bold text-ink">Text messages</h2>
         <p className="mt-4">
           If you check the consent box on the contact form, {config.displayName} may send you text messages about your request.
           Consent is not a condition of purchase. Message and data rates may apply. Reply STOP to any message to opt out, or
           reply HELP for assistance. Mobile information is not shared with third parties for marketing purposes.
         </p>
 
-        <h2 className="mt-10 font-heading text-2xl font-bold text-primary-dark">Service providers</h2>
+        <h2 className="mt-10 font-heading text-2xl font-bold text-ink">Service providers</h2>
         <p className="mt-4">
           Form submissions are delivered to us through a customer relationship platform operated on our behalf by Align and
           Acquire, which stores them so we can follow up. The site is hosted by a commercial hosting provider, which may
           log standard request data.
         </p>
 
-        <h2 className="mt-10 font-heading text-2xl font-bold text-primary-dark">Cookies and analytics</h2>
+        <h2 className="mt-10 font-heading text-2xl font-bold text-ink">Cookies and analytics</h2>
         <p className="mt-4">
           This site does not set tracking cookies of its own. If analytics or advertising tags are added in the future, this
           policy will be updated to describe them.
         </p>
 
-        <h2 className="mt-10 font-heading text-2xl font-bold text-primary-dark">Your choices</h2>
+        <h2 className="mt-10 font-heading text-2xl font-bold text-ink">Your choices</h2>
         <p className="mt-4">
           You can ask us to correct or delete the information you sent us at any time. Call <Phone /> {config.email ? (
             <>

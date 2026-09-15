@@ -51,6 +51,41 @@ const faq = z.object({
   a: z.string().min(20),
 })
 
+const hex = z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'must be a 6-digit hex color like #2DD4FF')
+
+/**
+ * The color visualizer. Each scene is one real photograph of the same install
+ * in a different lighting scene (technique A). Adding a scene is a config edit
+ * plus its photo in public/images/originals; the component never changes.
+ */
+const visualizer = z
+  .object({
+    defaultScene: slug,
+    scenes: z
+      .array(
+        z.object({
+          key: slug,
+          name: z.string().min(2),
+          /** Short sub-label shown under the scene name. */
+          description: z.string().min(2),
+          /** Swatch colors. More than one renders a hard-stop multi-color swatch. */
+          colors: z.array(hex).min(1),
+          /** Glow tint over the photo. null for no glow (for example lights off). */
+          glow: hex.nullable(),
+          /** Filename in public/images/originals (manifest key). */
+          image: z.string().min(1),
+        }),
+      )
+      .min(1),
+  })
+  .superRefine((v, ctx) => {
+    const keys = v.scenes.map((s) => s.key)
+    if (new Set(keys).size !== keys.length) ctx.addIssue({ code: 'custom', message: 'scene keys must be unique', path: ['scenes'] })
+    const images = v.scenes.map((s) => s.image)
+    if (new Set(images).size !== images.length) ctx.addIssue({ code: 'custom', message: 'each scene needs its own photograph', path: ['scenes'] })
+    if (!keys.includes(v.defaultScene)) ctx.addIssue({ code: 'custom', message: 'defaultScene must be one of the scene keys', path: ['defaultScene'] })
+  })
+
 export const siteConfigSchema = z
   .object({
     /**
@@ -164,7 +199,11 @@ export const siteConfigSchema = z
       hero: z.string().nullable(),
       about: z.string().nullable(),
       gallery: z.array(z.string()).default([]),
+      crew: z.array(z.string()).default([]),
     }),
+
+    /** null when the site has no visualizer. */
+    visualizer: visualizer.nullable(),
 
     /** Full origin including https:// and www. when www is the primary host. No trailing slash. */
     domain: z
@@ -182,6 +221,8 @@ export type ServiceArea = SiteConfigParsed['serviceAreas'][number]
 export type Review = SiteConfigParsed['reviews'][number]
 export type Faq = SiteConfigParsed['faqs'][number]
 export type Hours = NonNullable<SiteConfigParsed['hours']>
+export type Visualizer = NonNullable<SiteConfigParsed['visualizer']>
+export type Scene = Visualizer['scenes'][number]
 
 /** Derived fields that are computed, never authored. */
 export type SiteConfig = SiteConfigParsed & {

@@ -11,7 +11,7 @@ export function GET() {
     '',
     `> ${c.tagline}`,
     '',
-    `${c.legalName} provides ${c.services.map((s) => s.name.toLowerCase()).join(', ')} in ${c.primaryCity}, ${c.primaryState} and surrounding areas.`,
+    `${c.displayName} provides ${c.services.map((s) => s.name.toLowerCase()).join(', ')} in ${c.primaryCity}, ${c.primaryState} and surrounding areas.`,
     '',
     '## Contact',
     `- Phone: ${c.phoneDisplay}`,
@@ -24,7 +24,8 @@ export function GET() {
     ...c.services.map((s) => `- [${s.name}](${url(`/services/${s.slug}`)}): ${s.shortDescription}`),
     '',
     '## Service areas',
-    ...c.serviceAreas.map((a) => `- [${a.name}, ${c.primaryState}](${url(`/areas/${a.slug}`)})`),
+    ...c.serviceAreas.map((a) => `- ${a.name}`),
+    `- All areas: ${url('/service-areas')}`,
   ]
   if (c.hours) {
     lines.push('', '## Hours', ...c.hours.map((h) => `- ${h.day}: ${formatTime(h.open)} to ${formatTime(h.close)}`))
@@ -34,7 +35,16 @@ export function GET() {
   if (c.insured === true) facts.push('- Insured: yes')
   if (c.licenseNumber) facts.push(`- License: ${c.licenseNumber}`)
   if (facts.length) lines.push('', '## Credentials', ...facts)
-  lines.push('', '## Pages', `- [About](${url('/about')})`, `- [Privacy Policy](${url('/privacy-policy')})`, `- [Sitemap](${url('/sitemap.xml')})`)
+  lines.push(
+    '',
+    '## Pages',
+    `- [How It Works](${url('/how-it-works')})`,
+    `- [Gallery](${url('/gallery')})`,
+    `- [Why ${c.displayName}](${url('/why-kalights')})`,
+    `- [FAQ](${url('/faq')})`,
+    `- [Privacy Policy](${url('/privacy-policy')})`,
+    `- [Sitemap](${url('/sitemap.xml')})`,
+  )
 
   return new Response(lines.join('\n') + '\n', {
     headers: { 'Content-Type': 'text/plain; charset=utf-8' },

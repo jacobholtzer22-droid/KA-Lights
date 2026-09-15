@@ -1,68 +1,85 @@
 /**
- * Visual theme. This is the one file (with app/fonts.ts) where the agent has
- * real freedom: pick a direction, a palette, and a hero layout so two client
- * sites do not look like the same site with different words. No business facts
- * belong here.
+ * Visual theme. With app/fonts.ts, the only place design decisions live. No
+ * business facts belong here.
  *
- * Rules the palette must satisfy (AGENT.md Phase 2c): one dark neutral, one
- * warm or cool off-white, exactly one accent used on under 5% of any page. No
- * pure #000000 or #FFFFFF. `onPrimary` sits on `primary`, `onAccent` on
- * `accent`, `ink` on `bg` and `surface`. One radius and one shadow for the
- * whole site; components read them as CSS variables and nothing else.
+ * Kalights is a dark-ground site. Colors are the client's brand colors taken
+ * exactly from the current site (audit/REFERENCE-SITE.md), not re-chosen.
+ *
+ * Token note for dark grounds: components/ContactForm.tsx is sealed and uses
+ * text-primary-dark for its success heading, text-primary for phone links,
+ * and focus:border-primary. On this site `primary` is therefore the cyan
+ * emphasis color and `primaryDark` is the strongest text color, so the sealed
+ * form stays legible without being edited. Dark surfaces use `bg` and `surface`.
  */
 export type HeroVariant = 'full-bleed' | 'split'
 
 export interface Theme {
   palette: {
-    /** The dark neutral. Also the full-dark section background. */
+    /** Emphasis color: links, focus borders. */
     primary: string
+    /** Strongest text color. */
     primaryDark: string
+    /** Focus ring tint. */
     primarySoft: string
-    /** The single accent. Buttons, the call bar, small marks. Under 5% of any page. */
     accent: string
     accentDark: string
-    /** The off-white page ground. */
+    /** Page ground. */
     bg: string
+    /** Cards, panels, form card. */
     surface: string
-    /** Body text. Never pure black. */
+    /** Raised items on a surface. */
+    surfaceRaised: string
+    /** Headings and primary text. */
     ink: string
+    /** Body text. */
+    inkSoft: string
+    /** Labels, secondary text. */
     muted: string
     line: string
     onPrimary: string
     onAccent: string
+    /** Warm highlight. */
+    warm: string
   }
-  /**
-   * 'full-bleed': client photo behind a dark scrim, headline and phone CTA
-   * left-aligned in the lower third. Needs a photo that can carry it.
-   * 'split': large photo one side, oversized type the other. For weaker photos.
-   */
+  /** Brand gradient used for highlighted words and divider strips. */
+  spectrum: string
   heroVariant: HeroVariant
-  /** The ONE corner radius for the site, in rem. 0 for hard edges. */
+  /** Inputs, form card, and compact buttons, in rem. Read by the sealed form as var(--radius). */
   radius: number
-  /** The ONE shadow for the site, as a CSS box-shadow value. 'none' is valid. */
+  /** Cards and images, in rem. */
+  radiusCard: number
+  /** Large panels, in rem. */
+  radiusPanel: number
   shadow: string
+  /** Cyan glow used on primary calls to action. */
+  shadowGlow: string
 }
 
-// Shipped default follows the "Cultivated" direction for the lawn-care sample:
-// deep green, warm off-white, one muted cedar accent, serif display (app/fonts.ts).
 const theme: Theme = {
   palette: {
-    primary: '#1E3D2C',
-    primaryDark: '#152B1F',
-    primarySoft: '#E9EFE8',
-    accent: '#A8623A',
-    accentDark: '#8B4E2C',
-    bg: '#F6F3EC',
-    surface: '#FDFBF7',
-    ink: '#1A1F1B',
-    muted: '#5C6660',
-    line: '#DCD8CE',
-    onPrimary: '#F6F3EC',
-    onAccent: '#F6F3EC',
+    primary: '#2DD4FF',
+    primaryDark: '#F4F6FB',
+    primarySoft: '#0F3340',
+    accent: '#2DD4FF',
+    accentDark: '#12A9DA',
+    bg: '#0A0B0F',
+    surface: '#14171F',
+    surfaceRaised: '#1C212C',
+    ink: '#F4F6FB',
+    inkSoft: '#C6CDDA',
+    muted: '#8A93A6',
+    line: 'rgba(255, 255, 255, 0.08)',
+    onPrimary: '#04121A',
+    onAccent: '#04121A',
+    warm: '#FFC97A',
   },
+  spectrum: 'linear-gradient(90deg, #2DD4FF 0%, #6366F1 34%, #D946EF 64%, #FB923C 100%)',
   heroVariant: 'full-bleed',
-  radius: 0.375,
-  shadow: '0 1px 2px rgb(20 30 24 / 0.08)',
+  radius: 0.75,
+  radiusCard: 1,
+  radiusPanel: 1.5,
+  shadow: '0 10px 30px -10px rgb(0 0 0 / 0.5)',
+  shadowGlow: '0 10px 30px -12px #2DD4FF',
 }
 
 export default theme

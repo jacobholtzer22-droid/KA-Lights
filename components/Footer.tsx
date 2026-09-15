@@ -1,50 +1,62 @@
 import Link from 'next/link'
 import { config, formatTime } from '@/lib/config'
+import { FOOTER_LINKS } from '@/lib/navigation'
+import { siteCopy } from '@/lib/page-content'
+import { PhoneIcon } from './icons'
 import Phone from './Phone'
 
-const PROFILE_LABELS: Record<string, string> = {
-  gbp: 'Google',
-  facebook: 'Facebook',
-  instagram: 'Instagram',
-  yelp: 'Yelp',
+const columnHeading = 'font-heading text-step-0 font-semibold text-ink'
+
+function handle(url: string): string {
+  return `@${new URL(url).pathname.replace(/\//g, '')}`
 }
 
 export default function Footer() {
   const year = new Date().getFullYear()
-  const profiles = Object.entries(config.profiles).filter((e): e is [string, string] => typeof e[1] === 'string')
+  const instagram = config.profiles.instagram ?? null
 
   return (
-    <footer className="mt-16 border-t border-line bg-primary-dark text-on-primary">
-      <div className="mx-auto grid max-w-page gap-10 px-4 py-12 sm:px-6 md:grid-cols-4">
+    <footer className="relative border-t border-line bg-bg">
+      <div aria-hidden="true" className="strip-spectrum absolute inset-x-0 top-0" />
+      <div className="mx-auto grid max-w-page gap-10 px-4 pb-10 pt-16 md:grid-cols-2 lg:grid-cols-4 lg:px-8 lg:pt-20">
         <div>
-          <p className="font-heading text-lg font-bold">{config.displayName}</p>
-          <p className="mt-2 text-sm opacity-80">{config.tagline}</p>
-          <p className="mt-4 text-sm">
-            <Phone className="text-on-primary" />
+          <Link href="/" className="font-body text-step-1 font-bold uppercase tracking-[0.25em] text-ink">
+            {config.displayName}
+          </Link>
+          <p className="mt-4 max-w-xs text-step--1 text-ink-soft">
+            {siteCopy.footerBlurb} {config.tagline}
           </p>
-          {config.email && (
-            <p className="mt-1 text-sm">
-              <a href={`mailto:${config.email}`} className="underline-offset-2 hover:underline">
-                {config.email}
-              </a>
-            </p>
-          )}
-          {config.address && (
-            <address className="mt-3 text-sm not-italic opacity-80">
-              {config.address.street}
-              <br />
-              {config.address.city}, {config.address.state} {config.address.zip}
-            </address>
-          )}
         </div>
 
         <div>
-          <p className="text-sm font-semibold uppercase tracking-wide opacity-70">Services</p>
-          <ul className="mt-3 space-y-2 text-sm">
-            {config.services.map((s) => (
-              <li key={s.slug}>
-                <Link href={`/services/${s.slug}`} className="hover:underline">
-                  {s.name}
+          <h2 className={columnHeading}>Contact</h2>
+          <ul className="mt-4 space-y-3 text-step--1 text-ink-soft">
+            <li className="flex items-center gap-2">
+              <PhoneIcon className="h-4 w-4 text-accent" />
+              <Phone className="text-ink-soft" />
+            </li>
+            {config.email && (
+              <li>
+                <a href={`mailto:${config.email}`} className="hover:text-ink">
+                  {config.email}
+                </a>
+              </li>
+            )}
+            {config.hours?.map((h) => (
+              <li key={h.day}>
+                {h.day}: {formatTime(h.open)} to {formatTime(h.close)}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h2 className={columnHeading}>Quick Links</h2>
+          <ul className="mt-4 space-y-3 text-step--1">
+            {FOOTER_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="text-ink-soft hover:text-ink">
+                  {link.label}
                 </Link>
               </li>
             ))}
@@ -52,57 +64,35 @@ export default function Footer() {
         </div>
 
         <div>
-          <p className="text-sm font-semibold uppercase tracking-wide opacity-70">Service Areas</p>
-          <ul className="mt-3 space-y-2 text-sm">
+          <h2 className={columnHeading}>Service Areas</h2>
+          <ul className="mt-4 space-y-3 text-step--1 text-ink-soft">
             {config.serviceAreas.map((a) => (
-              <li key={a.slug}>
-                <Link href={`/areas/${a.slug}`} className="hover:underline">
-                  {a.name}, {config.primaryState}
-                </Link>
-              </li>
+              <li key={a.slug}>{a.name}</li>
             ))}
+            <li>
+              <Link href="/service-areas" className="text-accent hover:underline">
+                View All Areas <span aria-hidden="true">→</span>
+              </Link>
+            </li>
           </ul>
-        </div>
-
-        <div>
-          {config.hours && (
-            <>
-              <p className="text-sm font-semibold uppercase tracking-wide opacity-70">Hours</p>
-              <ul className="mt-3 space-y-1 text-sm">
-                {config.hours.map((h) => (
-                  <li key={h.day} className="flex justify-between gap-4">
-                    <span>{h.day}</span>
-                    <span>
-                      {formatTime(h.open)} to {formatTime(h.close)}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-          {profiles.length > 0 && (
-            <ul className="mt-6 flex flex-wrap gap-4 text-sm">
-              {profiles.map(([key, url]) => (
-                <li key={key}>
-                  <a href={url} rel="noopener" target="_blank" className="underline-offset-2 hover:underline">
-                    {PROFILE_LABELS[key] ?? key}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
         </div>
       </div>
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-page flex-wrap items-center justify-between gap-2 px-4 py-4 text-xs opacity-70 sm:px-6">
+
+      <div className="border-t border-line">
+        <div className="mx-auto flex max-w-page flex-wrap items-center justify-between gap-3 px-4 py-6 text-step--1 text-muted lg:px-8">
           <p>
             &copy; {year} {config.legalName}. All rights reserved.
           </p>
-          <p className="flex gap-4">
-            <Link href="/privacy-policy" className="hover:underline">
+          <p className="flex flex-wrap gap-5">
+            <Link href="/privacy-policy" className="hover:text-ink">
               Privacy Policy
             </Link>
-            <a href="https://www.alignandacquire.com" rel="noopener" target="_blank" className="hover:underline">
+            {instagram && (
+              <a href={instagram} rel="noopener" target="_blank" className="hover:text-ink">
+                {handle(instagram)}
+              </a>
+            )}
+            <a href="https://www.alignandacquire.com" rel="noopener" target="_blank" className="hover:text-ink">
               Site by Align and Acquire
             </a>
           </p>

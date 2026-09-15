@@ -10,7 +10,8 @@
     "images": "tsx scripts/process-images.ts",
     "verify": "next build && tsx scripts/verify.ts",
     "typecheck": "tsc --noEmit",
-    "seal-contact-form": "tsx scripts/seal-contact-form.ts"
+    "seal-contact-form": "tsx scripts/seal-contact-form.ts",
+    "gate": "node scripts/launch-gate.mjs"
   },
   "dependencies": {
     "next": "14.2.21",

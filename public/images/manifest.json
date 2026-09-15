@@ -1,53 +1,171 @@
 {
-  "sample-cleanup.jpg": {
+  "placeholder-crew-1.jpg": {
+    "width": 1500,
+    "height": 1000,
+    "alt": "Photo pending placeholder graphic for crew photo 1, not a photograph of the team",
+    "base": "placeholder-crew-1",
+    "sizes": [
+      640,
+      1024
+    ]
+  },
+  "placeholder-crew-2.jpg": {
+    "width": 1500,
+    "height": 1000,
+    "alt": "Photo pending placeholder graphic for crew photo 2, not a photograph of the team",
+    "base": "placeholder-crew-2",
+    "sizes": [
+      640,
+      1024
+    ]
+  },
+  "placeholder-crew-3.jpg": {
+    "width": 1500,
+    "height": 1000,
+    "alt": "Photo pending placeholder graphic for crew photo 3, not a photograph of the team",
+    "base": "placeholder-crew-3",
+    "sizes": [
+      640,
+      1024
+    ]
+  },
+  "placeholder-gallery-1.jpg": {
     "width": 1600,
-    "height": 1200,
-    "alt": "Sample placeholder graphic in autumn brown and gold tones standing in for a seasonal cleanup photo",
-    "base": "sample-cleanup",
+    "height": 900,
+    "alt": "Photo pending placeholder graphic for gallery photo 1, not a photograph of an installation",
+    "base": "placeholder-gallery-1",
     "sizes": [
       640,
       1024
     ]
   },
-  "sample-crew.jpg": {
-    "width": 1200,
-    "height": 1500,
-    "alt": "Sample placeholder graphic in slate blue tones, portrait orientation, standing in for a crew photo",
-    "base": "sample-crew",
+  "placeholder-gallery-2.jpg": {
+    "width": 1600,
+    "height": 900,
+    "alt": "Photo pending placeholder graphic for gallery photo 2, not a photograph of an installation",
+    "base": "placeholder-gallery-2",
     "sizes": [
       640,
       1024
     ]
   },
-  "sample-hero.jpg": {
-    "width": 2000,
-    "height": 1333,
-    "alt": "Sample placeholder graphic in green tones with diagonal stripes standing in for a hero lawn photo",
-    "base": "sample-hero",
+  "placeholder-gallery-3.jpg": {
+    "width": 1600,
+    "height": 900,
+    "alt": "Photo pending placeholder graphic for gallery photo 3, not a photograph of an installation",
+    "base": "placeholder-gallery-3",
+    "sizes": [
+      640,
+      1024
+    ]
+  },
+  "placeholder-gallery-4.jpg": {
+    "width": 1600,
+    "height": 900,
+    "alt": "Photo pending placeholder graphic for gallery photo 4, not a photograph of an installation",
+    "base": "placeholder-gallery-4",
+    "sizes": [
+      640,
+      1024
+    ]
+  },
+  "placeholder-hero.jpg": {
+    "width": 1920,
+    "height": 1080,
+    "alt": "Photo pending placeholder graphic for the homepage hero, not a photograph of an installation",
+    "base": "placeholder-hero",
     "sizes": [
       640,
       1024,
       1920
     ]
   },
-  "sample-mowing.jpg": {
-    "width": 1600,
-    "height": 1200,
-    "alt": "Sample placeholder graphic in bright green tones standing in for a freshly mowed lawn photo",
-    "base": "sample-mowing",
+  "placeholder-scene-christmas.jpg": {
+    "width": 1920,
+    "height": 1080,
+    "alt": "Photo pending placeholder graphic for the Christmas lighting scene, not a photograph of a home",
+    "base": "placeholder-scene-christmas",
     "sizes": [
       640,
-      1024
+      1024,
+      1920
     ]
   },
-  "sample-mulch.jpg": {
-    "width": 1600,
-    "height": 1200,
-    "alt": "Sample placeholder graphic in brown tones standing in for a mulched landscape bed photo",
-    "base": "sample-mulch",
+  "placeholder-scene-cool-white.jpg": {
+    "width": 1920,
+    "height": 1080,
+    "alt": "Photo pending placeholder graphic for the Cool White lighting scene, not a photograph of a home",
+    "base": "placeholder-scene-cool-white",
     "sizes": [
       640,
-      1024
+      1024,
+      1920
+    ]
+  },
+  "placeholder-scene-fourth-of-july.jpg": {
+    "width": 1920,
+    "height": 1080,
+    "alt": "Photo pending placeholder graphic for the Fourth of July lighting scene, not a photograph of a home",
+    "base": "placeholder-scene-fourth-of-july",
+    "sizes": [
+      640,
+      1024,
+      1920
+    ]
+  },
+  "placeholder-scene-game-day.jpg": {
+    "width": 1920,
+    "height": 1080,
+    "alt": "Photo pending placeholder graphic for the Game Day lighting scene, not a photograph of a home",
+    "base": "placeholder-scene-game-day",
+    "sizes": [
+      640,
+      1024,
+      1920
+    ]
+  },
+  "placeholder-scene-halloween.jpg": {
+    "width": 1920,
+    "height": 1080,
+    "alt": "Photo pending placeholder graphic for the Halloween lighting scene, not a photograph of a home",
+    "base": "placeholder-scene-halloween",
+    "sizes": [
+      640,
+      1024,
+      1920
+    ]
+  },
+  "placeholder-scene-lights-off.jpg": {
+    "width": 1920,
+    "height": 1080,
+    "alt": "Photo pending placeholder graphic for the Lights Off lighting scene, not a photograph of a home",
+    "base": "placeholder-scene-lights-off",
+    "sizes": [
+      640,
+      1024,
+      1920
+    ]
+  },
+  "placeholder-scene-party.jpg": {
+    "width": 1920,
+    "height": 1080,
+    "alt": "Photo pending placeholder graphic for the Party lighting scene, not a photograph of a home",
+    "base": "placeholder-scene-party",
+    "sizes": [
+      640,
+      1024,
+      1920
+    ]
+  },
+  "placeholder-scene-warm-white.jpg": {
+    "width": 1920,
+    "height": 1080,
+    "alt": "Photo pending placeholder graphic for the Warm White lighting scene, not a photograph of a home",
+    "base": "placeholder-scene-warm-white",
+    "sizes": [
+      640,
+      1024,
+      1920
     ]
   }
 }

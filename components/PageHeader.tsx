@@ -1,34 +1,41 @@
-import Link from 'next/link'
-import type { Crumb } from '@/lib/schema'
+import type { Display } from '@/lib/page-content'
+import Highlight from './Highlight'
 
 /**
- * Interior page band. Owns the page's single <h1>, which is always derived from
- * config by the page template. Content files start at <h2>.
+ * Interior page header. Owns the page's single <h1>, which always carries the
+ * service and, where natural, the city. When the current site shows a short
+ * display headline ("How It Works"), it keeps its size and position as a
+ * styled <p>, and the H1 sits under it as a native-looking subhead.
  */
-export default function PageHeader({ title, intro, crumbs }: { title: string; intro?: string; crumbs?: readonly Crumb[] }) {
+export default function PageHeader({
+  display,
+  highlightClass = 'text-accent',
+  title,
+  intro,
+  lead,
+}: {
+  display?: Display | null
+  highlightClass?: string
+  title: string
+  intro?: string
+  lead?: string | null
+}) {
   return (
-    <section className="bg-primary-soft">
-      <div className="mx-auto max-w-page px-4 py-12 sm:px-6 md:py-16">
-        {crumbs && crumbs.length > 1 && (
-          <nav aria-label="Breadcrumb" className="mb-4 text-sm text-muted">
-            <ol className="flex flex-wrap gap-2">
-              {crumbs.map((c, i) => (
-                <li key={c.path} className="flex gap-2">
-                  {i < crumbs.length - 1 ? (
-                    <Link href={c.path} className="hover:text-primary">
-                      {c.name}
-                    </Link>
-                  ) : (
-                    <span aria-current="page">{c.name}</span>
-                  )}
-                  {i < crumbs.length - 1 && <span aria-hidden="true">/</span>}
-                </li>
-              ))}
-            </ol>
-          </nav>
+    <section className="relative isolate overflow-hidden">
+      <div aria-hidden="true" className="absolute inset-0 -z-10" style={{ background: 'radial-gradient(ellipse at top, rgba(45, 212, 255, 0.08), transparent 60%)' }} />
+      <div className="mx-auto max-w-4xl px-4 pb-10 pt-16 text-center md:pt-24 lg:px-8">
+        {display ? (
+          <>
+            <p className="font-heading text-page font-bold text-ink">
+              <Highlight text={display.text} highlight={display.highlight} className={highlightClass} />
+            </p>
+            <h1 className="mt-5 font-body text-step-1 font-semibold text-ink md:text-step-2">{title}</h1>
+          </>
+        ) : (
+          <h1 className="font-heading text-page font-bold text-ink">{title}</h1>
         )}
-        <h1 className="font-heading text-4xl font-bold leading-tight text-primary-dark md:text-5xl">{title}</h1>
-        {intro && <p className="mt-4 max-w-2xl text-lg text-muted">{intro}</p>}
+        {intro && <p className="mx-auto mt-4 max-w-2xl text-step-1 text-ink-soft">{intro}</p>}
+        {lead && <p className="mx-auto mt-3 max-w-2xl text-step-1 text-ink-soft">{lead}</p>}
       </div>
     </section>
   )

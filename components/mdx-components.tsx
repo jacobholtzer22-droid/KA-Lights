@@ -9,8 +9,11 @@ import Phone from './Phone'
 import ServiceGrid from './ServiceGrid'
 
 /**
- * Everything a content file may use. Facts arrive through these components or
- * through {config.*} interpolation; nothing else is available to MDX.
+ * Everything a content file may use. Facts arrive through these components and
+ * the per-page ones added in lib/content.ts (<ServiceDescription />,
+ * <ServicePriceNote />, <ServiceName />, <AreaName />). JavaScript expressions
+ * are NOT available: next-mdx-remote 6 deletes them silently, and lib/content.ts
+ * fails the build if one appears.
  */
 
 function H1(): never {

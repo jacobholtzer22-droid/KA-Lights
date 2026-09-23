@@ -1,0 +1,77 @@
+{
+  "hero": {
+    "brandLine": {
+      "text": "Your home, in any color. Every night of the year.",
+      "highlight": "any color."
+    },
+    "lead": "Professionally installed, app-controlled, warm white for everyday and full color for any occasion.",
+    "trustLabels": []
+  },
+  "serviceAreas": {
+    "eyebrow": "Serving the Inland Empire"
+  },
+  "visualizer": {
+    "eyebrow": "Control it from your phone",
+    "heading": {
+      "text": "See your home in any color.",
+      "highlight": "any color"
+    },
+    "body": "Christmas tonight. Warm white tomorrow. Team colors this weekend. Tap a scene to see it on a sample home. Your system switches the same way from the app.",
+    "hint": "Tap a scene"
+  },
+  "features": {
+    "eyebrow": "Why permanent lighting",
+    "heading": "Brilliant nights.",
+    "headingSecondLine": "Zero effort.",
+    "cards": [
+      {
+        "icon": "ladder",
+        "title": "No More Ladders",
+        "body": null
+      },
+      {
+        "icon": "palette",
+        "title": "Any Color, Any Occasion",
+        "body": "Full RGB plus warm white. Perfect for holidays, game days, or everyday elegance."
+      },
+      {
+        "icon": "eye",
+        "title": null,
+        "body": null
+      },
+      {
+        "icon": "season",
+        "title": null,
+        "body": null
+      }
+    ]
+  },
+  "galleryTeaser": {
+    "heading": "Design ideas.",
+    "subheading": "Concept renderings of what permanent lighting can look like. Photos of our own completed installs are coming soon.",
+    "cta": "See All Design Ideas"
+  },
+  "crew": {
+    "eyebrow": "Local & hands-on",
+    "heading": null,
+    "body": "Kalights is a local, hands-on Inland Empire team."
+  },
+  "process": {
+    "heading": "Seamless from start to finish."
+  },
+  "difference": {
+    "eyebrow": "The Kalights difference",
+    "heading": null,
+    "headingSecondLine": null,
+    "paragraphs": [],
+    "labels": []
+  },
+  "quote": {
+    "heading": {
+      "text": "Ready to light up your home, year round?",
+      "highlight": "year round?"
+    },
+    "subheading": null,
+    "note": null
+  }
+}

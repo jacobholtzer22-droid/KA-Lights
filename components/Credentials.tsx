@@ -11,7 +11,7 @@ export default function Credentials({ className = '' }: { className?: string }) 
   if (config.licenseNumber) items.push(`License ${config.licenseNumber}`)
   if (items.length === 0) return null
   return (
-    <ul className={`flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-primary-dark ${className}`}>
+    <ul className={`flex flex-wrap gap-x-6 gap-y-2 text-step--1 font-medium text-ink ${className}`}>
       {items.map((item) => (
         <li key={item} className="flex items-center gap-2">
           <span aria-hidden="true" className="inline-block h-2 w-2 rounded-full bg-accent" />

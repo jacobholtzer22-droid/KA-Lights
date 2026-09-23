@@ -1,4 +1,5 @@
 import manifest from '@/public/images/manifest.json'
+import register from '@/placeholders.json'
 
 /**
  * Read side of the image pipeline. scripts/process-images.ts writes
@@ -30,6 +31,41 @@ export interface ResolvedImage {
   height: number
   alt: string
   sizes: number[]
+}
+
+/** True for the labeled stand-in frames used while real photography is pending (launch blocker B1). */
+export function isPlaceholder(filename: string): boolean {
+  return /^placeholder-/i.test(filename)
+}
+
+/**
+ * Status in the image register (placeholders.json) that marks an AI-generated
+ * design rendering. A rendering must always carry the visible "Design
+ * rendering" label and an alt starting "Rendering of" (verify check 23).
+ */
+export const RENDERING_STATUS = 'Rendering (AI, labeled)'
+export const RENDERING_LABEL = 'Design rendering'
+/** The visualizer scenes: one sample home, shown as a rendering rather than a Kalights job. */
+export const SAMPLE_HOME_LABEL = 'Sample home, design rendering'
+
+const renderings = new Set(
+  (register as { placeholders: { file: string; status: string }[] }).placeholders
+    .filter((e) => e.status === RENDERING_STATUS)
+    .map((e) => e.file),
+)
+
+/** True for an image registered as an AI design rendering. */
+export function isRendering(filename: string): boolean {
+  return renderings.has(filename)
+}
+
+/**
+ * First candidate that may represent the business off-page (og:image, schema
+ * image). Renderings are skipped: a share card or search result shows the
+ * image without the page's visible "Design rendering" label.
+ */
+export function shareableImage(candidates: (string | null | undefined)[]): string | null {
+  return candidates.find((name): name is string => !!name && hasImage(name) && !isRendering(name)) ?? null
 }
 
 export function hasImage(filename: string): boolean {

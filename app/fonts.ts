@@ -1,24 +1,25 @@
-import { Fraunces, Manrope } from 'next/font/google'
+import { Fraunces, Hanken_Grotesk } from 'next/font/google'
 
 /**
- * The two typefaces for this site, loaded through next/font so they are
- * self-hosted and subset at build time. This is the ONE file to edit to change
- * fonts: swap the imports and the two exports, keep the `variable` names, and
- * list only weights the family actually ships.
+ * PREVIEW TYPOGRAPHY, NOT REPRESENTATIVE.
  *
- * The display face must have character. Never Inter, system-ui, or Arial for
- * headings. See AGENT.md Phase 2 for the pairings per direction.
+ * The client's heading face is Clash Display, which is not committed yet: Will
+ * must download the official package himself (launch blocker B5.3), and it will
+ * load through next/font/local from unmodified files. Until then headings use
+ * the template's heading face, Fraunces, which looks nothing like Clash Display.
+ *
+ * Body text uses Hanken Grotesk, the client's body face.
  */
 export const headingFont = Fraunces({
   subsets: ['latin'],
-  weight: ['500', '700'],
+  weight: ['600', '700'],
   variable: '--font-heading',
   display: 'swap',
 })
 
-export const bodyFont = Manrope({
+export const bodyFont = Hanken_Grotesk({
   subsets: ['latin'],
-  weight: ['400', '600'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-body',
   display: 'swap',
 })

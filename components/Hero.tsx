@@ -1,66 +1,78 @@
 import Link from 'next/link'
 import { config } from '@/lib/config'
-import theme from '@/theme'
+import { pageH1, pageIntro } from '@/lib/headings'
+import { QUOTE_CTA } from '@/lib/navigation'
+import { homeCopy } from '@/lib/page-content'
+import Highlight from './Highlight'
+import { PhoneIcon } from './icons'
+import { isPlaceholder, isRendering } from '@/lib/images'
+import { darkVars } from '@/lib/theme-vars'
+import { btnOutline, btnPrimary } from '@/lib/ui'
 import Img from './Img'
-import Phone from './Phone'
+import PlaceholderChip from './PlaceholderChip'
+import RenderingLabel from './RenderingLabel'
 
 /**
- * Homepage hero. Owns the page's single <h1>. Layout comes from
- * theme.heroVariant; every word comes from config.
+ * Homepage hero. The brand line keeps the current site's display treatment as
+ * a styled <p>; the page's single <h1> is the service-plus-city line directly
+ * under it. Overlays are divs, never images.
  *
- * 'full-bleed': the client photograph under a dark scrim, headline and phone
- * CTA left-aligned in the lower third. 'split': large photo one side, oversized
- * type the other, for photography that cannot carry a full bleed. With no hero
- * image configured, 'split' renders type only.
+ * The hero sits on a night photograph, so it keeps the dark palette on a light
+ * page (decision 44): darkVars redefines every token for this subtree, which is
+ * why the buttons, the trust dots and the rendering label need no dark variant.
  */
 export default function Hero() {
-  const h1 = `${config.primaryService.name} in ${config.primaryCity}, ${config.primaryState}`
+  const copy = homeCopy.hero
   const hero = config.images.hero
 
-  const cta = (dark: boolean) => (
-    <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
-      <Link href="/contact" className="rounded-site bg-accent px-6 py-3.5 text-base font-semibold text-on-accent hover:bg-accent-dark">
-        Request a Free Quote
-      </Link>
-      <span className={`text-base ${dark ? 'text-on-primary' : 'text-ink'}`}>
-        or call <Phone className={dark ? 'text-on-primary' : 'text-primary-dark'} />
-      </span>
-    </div>
-  )
-
-  if (theme.heroVariant === 'full-bleed' && hero) {
-    return (
-      <section className="relative isolate flex min-h-[78vh] items-end overflow-hidden bg-primary-dark text-on-primary">
-        <Img name={hero} priority sizes="100vw" className="absolute inset-0 z-0 h-full w-full object-cover" />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 z-[1]"
-          style={{ background: 'linear-gradient(180deg, rgb(0 0 0 / 0.15) 0%, rgb(0 0 0 / 0.45) 45%, rgb(0 0 0 / 0.78) 100%)' }}
-        />
-        <div className="relative z-10 mx-auto w-full max-w-page px-4 pb-16 pt-40 sm:px-6 md:pb-24">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] opacity-85">{config.displayName}</p>
-          <h1 className="mt-4 max-w-4xl font-heading text-hero font-bold">{h1}</h1>
-          <p className="mt-6 max-w-2xl text-lg opacity-90 md:text-xl">{config.tagline}</p>
-          {cta(true)}
-        </div>
-      </section>
-    )
-  }
-
   return (
-    <section className="bg-bg">
-      <div className="mx-auto grid max-w-page items-center gap-12 px-4 py-20 sm:px-6 md:grid-cols-5 md:py-28">
-        <div className="md:col-span-3">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">{config.displayName}</p>
-          <h1 className="mt-4 font-heading text-hero font-bold text-primary-dark">{h1}</h1>
-          <p className="mt-6 max-w-xl text-lg text-muted md:text-xl">{config.tagline}</p>
-          {cta(false)}
-        </div>
-        {hero && (
-          <div className="overflow-hidden rounded-site shadow-site md:col-span-2">
-            <Img name={hero} priority sizes="(min-width: 768px) 40vw, 100vw" className="aspect-[4/5] h-auto w-full object-cover" />
+    <section
+      style={darkVars}
+      className="relative isolate flex min-h-[90vh] items-center overflow-hidden bg-bg text-ink-soft"
+      {...(hero && isRendering(hero) ? { 'data-rendering-frame': '' } : {})}
+    >
+      {hero && <Img name={hero} priority sizes="100vw" className="absolute inset-0 -z-20 h-full w-full object-cover" />}
+      {hero && isPlaceholder(hero) && <PlaceholderChip position="below-header" />}
+      {hero && isRendering(hero) && <RenderingLabel position="hero" />}
+      <div aria-hidden="true" className="absolute inset-0 -z-10" style={{ background: 'var(--hero-scrim-flat)' }} />
+      <div aria-hidden="true" className="absolute inset-0 -z-10" style={{ background: 'var(--hero-scrim-side)' }} />
+      <div aria-hidden="true" className="absolute inset-0 -z-10" style={{ background: 'var(--hero-scrim-bottom)' }} />
+
+      <div className="mx-auto w-full max-w-page px-4 pb-16 pt-24 lg:px-8 lg:pb-24 lg:pt-32">
+        <div className="max-w-3xl">
+          <p className="font-heading text-display font-bold text-ink">
+            <Highlight text={copy.brandLine.text} highlight={copy.brandLine.highlight} />
+          </p>
+          <h1 className="mt-6 font-body text-step-1 font-semibold text-ink md:text-step-2">{pageH1.home()}</h1>
+          <p className="mt-4 max-w-measure text-step-1 text-ink-soft">
+            {pageIntro()}
+            {copy.lead && ` ${copy.lead}`}
+          </p>
+
+          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+            <Link href={QUOTE_CTA.href} className={`${btnPrimary} px-8 py-4 text-step-1`}>
+              {QUOTE_CTA.label}
+            </Link>
+            <a
+              href={`tel:${config.phone}`}
+              className={`${btnOutline} px-8 py-4 text-step-1`}
+            >
+              <PhoneIcon className="h-5 w-5 text-accent-ink" />
+              {config.phoneDisplay}
+            </a>
           </div>
-        )}
+
+          {copy.trustLabels.length > 0 && (
+            <ul className="mt-10 flex flex-wrap gap-6 text-step--1 font-medium text-muted">
+              {copy.trustLabels.map((label) => (
+                <li key={label} className="flex items-center gap-2">
+                  <span aria-hidden="true" className="h-2 w-2 rounded-full bg-accent shadow-glow" />
+                  {label}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </section>
   )

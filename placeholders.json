@@ -1,0 +1,64 @@
+{
+  "placeholders": [
+    {
+      "file": "rendering-two-story-holiday-roofline.jpg",
+      "status": "Rendering (AI, labeled)"
+    },
+    {
+      "file": "rendering-spanish-style-multicolor.jpg",
+      "status": "Rendering (AI, labeled)"
+    },
+    {
+      "file": "rendering-two-story-rainbow.jpg",
+      "status": "Rendering (AI, labeled)"
+    },
+    {
+      "file": "rendering-backyard-pool-holiday.jpg",
+      "status": "Rendering (AI, labeled)"
+    },
+    {
+      "file": "rendering-purple-and-red-ranch.jpg",
+      "status": "Rendering (AI, labeled)"
+    },
+    {
+      "file": "rendering-red-and-white-two-story.jpg",
+      "status": "Rendering (AI, labeled)"
+    },
+    {
+      "file": "rendering-magenta-covered-patio.jpg",
+      "status": "Rendering (AI, labeled)"
+    },
+    {
+      "file": "rendering-sample-home-warm-white.jpg",
+      "status": "Rendering (AI, labeled)"
+    },
+    {
+      "file": "rendering-sample-home-cool-white.jpg",
+      "status": "Rendering (AI, labeled)"
+    },
+    {
+      "file": "rendering-sample-home-christmas.jpg",
+      "status": "Rendering (AI, labeled)"
+    },
+    {
+      "file": "rendering-sample-home-halloween.jpg",
+      "status": "Rendering (AI, labeled)"
+    },
+    {
+      "file": "rendering-sample-home-fourth-of-july.jpg",
+      "status": "Rendering (AI, labeled)"
+    },
+    {
+      "file": "rendering-sample-home-game-day.jpg",
+      "status": "Rendering (AI, labeled)"
+    },
+    {
+      "file": "rendering-sample-home-party.jpg",
+      "status": "Rendering (AI, labeled)"
+    },
+    {
+      "file": "rendering-sample-home-lights-off.jpg",
+      "status": "Rendering (AI, labeled)"
+    }
+  ]
+}

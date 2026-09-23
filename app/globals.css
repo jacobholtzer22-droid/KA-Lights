@@ -2,23 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Palette, radius, and shadow are injected as CSS variables by app/layout.tsx
-   from theme.ts. Fonts come from app/fonts.ts via next/font. */
+/* Palette, radii, shadows, and the spectrum gradient are injected as CSS
+   variables by app/layout.tsx from theme.ts. Fonts come from app/fonts.ts. */
 
 @layer base {
   html {
-    /* 17px body text at the default browser size. Tailwind's rem scale follows. */
-    font-size: 106.25%;
+    /* 16px base, the client's body size; the type scale is built on it. */
+    font-size: 100%;
+    /* The page ground is light; the dark bands set their own colors explicitly,
+       so native controls and scrollbars should follow the light ground. */
+    color-scheme: light;
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-bg font-body text-ink antialiased;
+    @apply bg-bg font-body text-ink-soft antialiased;
   }
   h1,
   h2,
   h3,
   h4 {
-    @apply font-heading;
+    @apply font-heading text-ink;
   }
   :focus-visible {
     outline: 2px solid var(--c-accent);
@@ -26,5 +29,75 @@
   }
   summary::-webkit-details-marker {
     display: none;
+  }
+}
+
+@layer utilities {
+  /* Highlighted words in display lines. Decorative only; the words stay real text. */
+  .text-spectrum {
+    background-image: var(--spectrum);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  /* The 2px brand strip across the top of sections. */
+  .strip-spectrum {
+    height: 2px;
+    background-image: var(--spectrum);
+  }
+}
+
+/* Reduced motion: everything resolves to its final state immediately. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Visualizer: the Party scene cycles the bloom color, like the reference site.
+   --kv-glow is registered so it interpolates; browsers without @property step
+   between colors instead, which is acceptable. Reduced motion holds it still. */
+@property --kv-glow {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: transparent;
+}
+@keyframes kv-party-glow {
+  0% {
+    --kv-glow: #ff3b3b;
+  }
+  18% {
+    --kv-glow: #fb923c;
+  }
+  36% {
+    --kv-glow: #facc15;
+  }
+  54% {
+    --kv-glow: #22c55e;
+  }
+  72% {
+    --kv-glow: #2dd4ff;
+  }
+  86% {
+    --kv-glow: #6366f1;
+  }
+  100% {
+    --kv-glow: #d946ef;
+  }
+}
+.kv-bloom-cycle {
+  animation: kv-party-glow 7s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .kv-bloom-cycle {
+    animation: none !important;
   }
 }

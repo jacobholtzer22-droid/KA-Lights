@@ -5,6 +5,7 @@ import * as cheerio from 'cheerio'
 import rawConfig from '../site.config'
 import { CONTACT_ENDPOINT, HONEYPOT_FIELD, SCHEMA_TYPES, SLUG_REGEX, siteConfigSchema } from '../lib/config-schema'
 import { DESCRIPTION_MAX, DESCRIPTION_MIN, TITLE_MAX, TITLE_MIN } from './verify-limits'
+import { inspectLaunchState } from './launch-gate.mjs'
 
 /**
  * THE GATE. Runs after `next build` against the static output in ./out and
@@ -23,6 +24,8 @@ const CONTENT = path.join(ROOT, 'content')
 const CONFIG_FILE = path.join(ROOT, 'site.config.ts')
 const FORM_FILE = path.join(ROOT, 'components/ContactForm.tsx')
 const FORM_BASELINE = path.join(ROOT, 'scripts/contact-form.sha256')
+const INDEXING_FILE = path.join(ROOT, 'indexing.json')
+const PREVIEW = process.env.PREVIEW === '1'
 const VERIFY_SLUG_URL = 'https://www.alignandacquire.com/api/verify-slug'
 
 /** Identity markers of the shipped sample config. Any of these in the identity fields means the template is unfilled. */
@@ -95,6 +98,11 @@ interface Page {
   route: string
   html: string
   $: cheerio.CheerioAPI
+}
+
+/** Every prose or copy file in content/: MDX and the structured JSON page copy. */
+function contentFiles(): string[] {
+  return [...walk(CONTENT, '.mdx'), ...walk(CONTENT, '.json')].sort()
 }
 
 function routeFromFile(file: string): string {
@@ -196,7 +204,7 @@ async function run() {
       )
       if (sampleImages.length) problems.push(`config still references sample images: ${[...new Set(sampleImages)].join(', ')}`)
     }
-    for (const file of [CONFIG_FILE, ...walk(CONTENT, '.mdx')]) {
+    for (const file of [CONFIG_FILE, ...contentFiles()]) {
       const text = fs.readFileSync(file, 'utf8')
       for (const token of SAMPLE_TOKENS) {
         const idx = text.indexOf(token)
@@ -292,7 +300,7 @@ async function run() {
       { name: 'price', re: /\$\s?\d/g },
     ]
     const problems: string[] = []
-    for (const file of walk(CONTENT, '.mdx')) {
+    for (const file of contentFiles()) {
       const text = fs.readFileSync(file, 'utf8')
       for (const { name, re } of patterns) {
         for (const m of text.matchAll(re)) {
@@ -306,7 +314,7 @@ async function run() {
   // 8. No placeholder tokens.
   {
     const problems: string[] = []
-    const files = [...walk(CONTENT, '.mdx'), CONFIG_FILE]
+    const files = [...contentFiles(), CONFIG_FILE]
     for (const file of files) {
       const text = fs.readFileSync(file, 'utf8')
       for (const token of PLACEHOLDER_TOKENS) {
@@ -468,6 +476,217 @@ async function run() {
     record(17, 'every internal link resolves to a built route', problems.size === 0, [...problems].slice(0, 8).join('; '))
   }
 
+  // 18. Launch gate: provisional values, placeholders, search engine blocking.
+  {
+    const name = 'launch gate (no provisional values, placeholders, or noindex)'
+    const { blockers, errors } = inspectLaunchState(ROOT)
+    const summary = (items: { rule: string; where: string }[]) => items.slice(0, 6).map((i) => `${i.rule} at ${i.where}`).join('; ')
+    if (errors.length) record(18, name, false, `consistency errors: ${summary(errors)}`)
+    else if (blockers.length === 0) record(18, name, true, 'clear')
+    else if (PREVIEW) record(18, name, true, `BYPASSED by PREVIEW=1: ${blockers.length} launch blocker(s). Not deployable to production.`)
+    else record(18, name, false, `${blockers.length} launch blocker(s): ${summary(blockers)}`)
+  }
+
+  // 19. Built HTML robots meta matches indexing.json on every page.
+  {
+    const problems: string[] = []
+    let noindex: boolean | null = null
+    try {
+      const value: unknown = JSON.parse(fs.readFileSync(INDEXING_FILE, 'utf8')).noindex
+      if (typeof value === 'boolean') noindex = value
+      else problems.push('indexing.json "noindex" is not a boolean')
+    } catch {
+      problems.push('indexing.json missing or unreadable')
+    }
+    if (noindex !== null) {
+      for (const p of pages) {
+        const robots = (p.$('meta[name="robots"]').attr('content') ?? '').toLowerCase()
+        if (noindex && !robots.includes('noindex')) problems.push(`${p.route}: robots meta "${robots}" lacks noindex while indexing.json says noindex`)
+        if (!noindex && robots.includes('noindex')) problems.push(`${p.route}: robots meta "${robots}" still says noindex`)
+      }
+    }
+    record(19, 'robots meta on every page matches indexing.json', problems.length === 0, problems.length ? problems.slice(0, 8).join('; ') : `noindex=${noindex}`)
+  }
+
+  // 20. Lead form mode matches the build: never live in a preview, never disabled in production.
+  {
+    const problems: string[] = []
+    const seen: string[] = []
+    const formPages = pages.filter((p) => p.$(`form[data-endpoint="${CONTACT_ENDPOINT}"]`).length > 0)
+    if (formPages.length === 0) problems.push('no page renders the contact form')
+    for (const p of formPages) {
+      p.$(`form[data-endpoint="${CONTACT_ENDPOINT}"]`).each((_, el) => {
+        const mode = p.$(el).closest('[data-lead-form-mode]').attr('data-lead-form-mode')
+        if (!mode) problems.push(`${p.route}: contact form is not inside the LeadForm wrapper`)
+        else if (PREVIEW && mode !== 'preview-disabled') problems.push(`${p.route}: PREVIEW build, but the form is "${mode}" and would write live leads`)
+        else if (!PREVIEW && mode !== 'live') problems.push(`${p.route}: production build, but lead submission is still disabled ("${mode}")`)
+        else seen.push(`${p.route}=${mode}`)
+      })
+    }
+    record(20, PREVIEW ? 'lead form cannot POST in a preview build' : 'lead form POSTs in a production build', problems.length === 0, problems.length ? problems.join('; ') : seen.join(', '))
+  }
+
+  // 21. No build command forces the preview bypass. No exemption, not even under PREVIEW=1:
+  //     a repo that sets PREVIEW=1 in its own scripts can never pass a launch verify.
+  {
+    const problems: string[] = []
+    const forced = /\bPREVIEW\s*=\s*["']?1\b/
+    try {
+      const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8')) as { scripts?: Record<string, string> }
+      for (const [name, script] of Object.entries(pkg.scripts ?? {})) {
+        if (forced.test(script)) problems.push(`package.json scripts.${name} sets PREVIEW=1 ("${script}")`)
+      }
+    } catch {
+      problems.push('package.json missing or unreadable')
+    }
+    const vercelFile = path.join(ROOT, 'vercel.json')
+    if (fs.existsSync(vercelFile)) {
+      try {
+        const buildCommand = (JSON.parse(fs.readFileSync(vercelFile, 'utf8')) as { buildCommand?: string }).buildCommand
+        if (buildCommand && forced.test(buildCommand)) problems.push(`vercel.json buildCommand sets PREVIEW=1 ("${buildCommand}")`)
+      } catch {
+        problems.push('vercel.json unreadable')
+      }
+    }
+    record(21, 'no build command forces PREVIEW=1 (preview bypass cannot ship)', problems.length === 0, problems.length ? problems.join('; ') : 'build scripts clean')
+  }
+
+  // 22. City pages exist for exactly the cities that have real, city-specific content.
+  {
+    const activeRoute = path.join(ROOT, 'app/service-areas/[slug]/page.tsx')
+    const parkedRoute = path.join(ROOT, 'app/service-areas/_city/[slug]/page.tsx')
+    const isActive = fs.existsSync(activeRoute)
+    const isParked = fs.existsSync(parkedRoute)
+    const qualifying = cfg ? cfg.serviceAreas.filter((a) => a.cityPage !== null).map((a) => a.slug) : []
+    const problems: string[] = []
+    if (!isActive && !isParked) problems.push('the city page route is missing from app/service-areas')
+    if (isActive && isParked) problems.push('the city page route exists both active and parked')
+    if (qualifying.length > 0 && !isActive) {
+      problems.push(`${qualifying.length} city page(s) have content (${qualifying.join(', ')}) but the route is parked: mv "app/service-areas/_city/[slug]" "app/service-areas/[slug]"`)
+    }
+    if (qualifying.length === 0 && isActive) {
+      problems.push('no city has cityPage content, and output: export cannot build a dynamic route with no params: park it at app/service-areas/_city/[slug]')
+    }
+    const built = pages.filter((p) => p.route.startsWith('/service-areas/')).map((p) => p.route.slice('/service-areas/'.length))
+    const extra = built.filter((slug) => !qualifying.includes(slug))
+    const missing = qualifying.filter((slug) => !built.includes(slug))
+    if (extra.length) problems.push(`built city page(s) with no content in config: ${extra.join(', ')}`)
+    if (missing.length) problems.push(`city(ies) with content but no built page: ${missing.join(', ')}`)
+    record(22, 'city pages exist only for cities with real content', problems.length === 0, problems.length ? problems.join('; ') : `${qualifying.length} city page(s); route ${isActive ? 'active' : 'parked'}`)
+  }
+
+  // 23. AI design renderings are disclosed on the page, every time they appear.
+  //     Re-encoding strips the file's C2PA manifest, so the visible label IS the
+  //     disclosure. A rendering (placeholders.json status starting "Rendering")
+  //     must render inside a [data-rendering-frame] that contains a visible
+  //     [data-rendering-label] reading "Design rendering", and its alt must start
+  //     "Rendering of". This stops the label quietly disappearing later.
+  //     Visualizer scene layers are matched by their data-image attribute too: only
+  //     the default scene has a real src until a visitor picks another one.
+  {
+    const problems: string[] = []
+    const register = JSON.parse(fs.readFileSync(path.join(ROOT, 'placeholders.json'), 'utf8')) as { placeholders: { file: string; status: string }[] }
+    const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'public/images/manifest.json'), 'utf8')) as Record<string, { base: string; alt: string | null }>
+    const renderingFiles = register.placeholders.filter((e) => /^rendering\b/i.test(e.status.trim())).map((e) => e.file)
+    const byBase = new Map<string, string>()
+    const renderingFiles_ = new Set(renderingFiles)
+    for (const file of renderingFiles) {
+      const entry = manifest[file]
+      if (!entry) {
+        problems.push(`${file}: registered as a rendering but missing from the manifest`)
+        continue
+      }
+      if (!(entry.alt ?? '').trim().startsWith('Rendering of')) problems.push(`${file}: manifest alt must start "Rendering of"`)
+      byBase.set(entry.base, file)
+    }
+    const HIDDEN_CLASS = /(^|\s)([a-z0-9]+:)*(sr-only|hidden|invisible|opacity-0)(\s|$)/
+    const HIDDEN_STYLE = /display:\s*none|visibility:\s*hidden|opacity:\s*0(?![.\d])/
+    let shown = 0
+    for (const p of pages) {
+      p.$('img').each((_, el) => {
+        const img = p.$(el)
+        const declared = img.attr('data-image')
+        const candidates = [img.attr('src') ?? '', ...(img.attr('srcset') ?? '').split(',').map((s) => s.trim().split(/\s+/)[0] ?? '')].filter(Boolean)
+        const file =
+          declared && renderingFiles_.has(declared) ? declared : candidates.map((c) => byBase.get(imageKey(c))).find((f): f is string => Boolean(f))
+        if (!file) return
+        shown++
+        if (!(img.attr('alt') ?? '').trim().startsWith('Rendering of')) problems.push(`${p.route}: ${file} alt does not start "Rendering of"`)
+        const frame = img.closest('[data-rendering-frame]')
+        if (frame.length === 0) {
+          problems.push(`${p.route}: ${file} is not inside a [data-rendering-frame]`)
+          return
+        }
+        const visible = frame.find('[data-rendering-label]').filter((_, label) => {
+          const $label = p.$(label)
+          if (!/design rendering/i.test($label.text())) return false
+          const chain = $label.add($label.parentsUntil('[data-rendering-frame]'))
+          return chain.toArray().every((n) => {
+            const $n = p.$(n)
+            return !HIDDEN_CLASS.test($n.attr('class') ?? '') && $n.attr('hidden') === undefined && !HIDDEN_STYLE.test($n.attr('style') ?? '')
+          })
+        })
+        if (visible.length === 0) problems.push(`${p.route}: ${file} is shown without a visible "Design rendering" label`)
+      })
+    }
+    record(
+      23,
+      'every AI rendering carries a visible label and a "Rendering of" alt',
+      problems.length === 0,
+      problems.length ? problems.slice(0, 8).join('; ') : `${renderingFiles.length} registered, ${shown} placement(s) labeled`,
+    )
+  }
+
+  // 24. Google Ads tag: present in a production build, absent in a preview build. Both directions.
+  //
+  //     "Present" means the LOADER, not the strings. config.googleAds is part of
+  //     site.config.ts, so its tag ID and labels sit in the client config chunk of
+  //     every build as inert data (in a preview build ADS minifies to `let o=null`
+  //     and the conversion body can never run). The executable signature is the
+  //     gtag.js URL and the gtag('config', ...) call, and those appear only when
+  //     components/GoogleAdsTag.tsx actually rendered, which it does only when
+  //     TRACKING_MODE is live. That is what is checked here.
+  {
+    const problems: string[] = []
+    const ads = cfg?.googleAds ?? null
+    const detail: string[] = []
+    if (!ads) {
+      detail.push('site.config.ts has no googleAds block')
+      if (!PREVIEW) problems.push('production build with no googleAds in site.config.ts: no conversion would ever be recorded')
+    } else {
+      const loader = `googletagmanager.com/gtag/js?id=${ads.tagId}`
+      const configCall = new RegExp(`gtag\\((?:\\\\?["'])config(?:\\\\?["']),\\s*(?:\\\\?["'])${ads.tagId}(?:\\\\?["'])\\)`)
+      const withLoader = pages.filter((p) => p.html.includes(loader))
+      const withConfig = pages.filter((p) => configCall.test(p.html))
+      const jsFiles = walk(path.join(ROOT, 'out/_next/static'), '.js')
+      const jsWithLoader = jsFiles.filter((f) => fs.readFileSync(f, 'utf8').includes('googletagmanager.com/gtag/js'))
+      const labels = [
+        ['quoteFormSubmitLabel', ads.quoteFormSubmitLabel],
+        ['clickToCallLabel', ads.clickToCallLabel],
+      ] as const
+      if (PREVIEW) {
+        if (withLoader.length) problems.push(`${withLoader.length} page(s) load gtag.js in a PREVIEW build (first: ${withLoader[0]?.route}): a preview never POSTs, so any conversion from it is fabricated`)
+        if (withConfig.length) problems.push(`${withConfig.length} page(s) carry the gtag config call in a PREVIEW build`)
+        if (jsWithLoader.length) problems.push(`${jsWithLoader.length} JS chunk(s) carry the gtag.js loader in a PREVIEW build (first: ${path.relative(ROOT, jsWithLoader[0] ?? '')})`)
+        detail.push(problems.length ? 'tag present' : `no gtag.js loader in ${pages.length} pages or ${jsFiles.length} chunks (tag ID remains in the config chunk as inert data)`)
+      } else {
+        const missingLoader = pages.filter((p) => !p.html.includes(loader)).map((p) => p.route)
+        const missingConfig = pages.filter((p) => !configCall.test(p.html)).map((p) => p.route)
+        if (missingLoader.length) problems.push(`${missingLoader.length} page(s) do not load gtag.js: ${missingLoader.slice(0, 4).join(', ')}`)
+        if (missingConfig.length) problems.push(`${missingConfig.length} page(s) lack gtag('config', '${ads.tagId}'): ${missingConfig.slice(0, 4).join(', ')}`)
+        for (const [name, value] of labels) {
+          const shipped = jsFiles.some((f) => fs.readFileSync(f, 'utf8').includes(value))
+          if (!shipped) problems.push(`${name} (${value}) appears in no built script: its conversion can never fire`)
+        }
+        detail.push(`${pages.length} pages load ${ads.tagId}; both conversion labels shipped`)
+      }
+      for (const [name, value] of labels) {
+        if (!value.startsWith(`${ads.tagId}/`)) problems.push(`${name} does not belong to ${ads.tagId}`)
+      }
+    }
+    record(24, PREVIEW ? 'no Google Ads tag in a preview build' : 'Google Ads tag on every page in a production build', problems.length === 0, problems.length ? problems.join('; ') : detail.join('; '))
+  }
+
   // ---------- report ----------
   results.sort((a, b) => a.id - b.id)
   const nameWidth = Math.max(...results.map((r) => r.name.length))
@@ -484,7 +703,8 @@ async function run() {
     console.log(`FAILED: ${failed.map((f) => `#${f.id}`).join(', ')}. Do not deploy.`)
     process.exit(1)
   }
-  console.log('All checks passed.')
+  if (PREVIEW) console.log('All checks passed for a PREVIEW build. The launch gate was bypassed: NOT deployable to production.')
+  else console.log('All checks passed.')
 }
 
 run().catch((err) => {

@@ -1,53 +1,222 @@
 {
-  "sample-cleanup.jpg": {
-    "width": 1600,
-    "height": 1200,
-    "alt": "Sample placeholder graphic in autumn brown and gold tones standing in for a seasonal cleanup photo",
-    "base": "sample-cleanup",
-    "sizes": [
-      640,
-      1024
-    ]
-  },
-  "sample-crew.jpg": {
-    "width": 1200,
-    "height": 1500,
-    "alt": "Sample placeholder graphic in slate blue tones, portrait orientation, standing in for a crew photo",
-    "base": "sample-crew",
-    "sizes": [
-      640,
-      1024
-    ]
-  },
-  "sample-hero.jpg": {
-    "width": 2000,
-    "height": 1333,
-    "alt": "Sample placeholder graphic in green tones with diagonal stripes standing in for a hero lawn photo",
-    "base": "sample-hero",
+  "kalights-crew-group-dsc07608.jpg": {
+    "width": 2400,
+    "height": 1600,
+    "alt": "Three Kalights crew members in black company polos and caps standing together on a front walkway in daylight",
+    "base": "kalights-crew-group-dsc07608",
     "sizes": [
       640,
       1024,
       1920
     ]
   },
-  "sample-mowing.jpg": {
-    "width": 1600,
-    "height": 1200,
-    "alt": "Sample placeholder graphic in bright green tones standing in for a freshly mowed lawn photo",
-    "base": "sample-mowing",
+  "kalights-crew-prep-dsc07640.jpg": {
+    "width": 2400,
+    "height": 1600,
+    "alt": "Two Kalights crew members preparing white track at a folding ladder by a dark gray garage door, a third behind",
+    "base": "kalights-crew-prep-dsc07640",
     "sizes": [
       640,
-      1024
+      1024,
+      1920
     ]
   },
-  "sample-mulch.jpg": {
-    "width": 1600,
-    "height": 1200,
-    "alt": "Sample placeholder graphic in brown tones standing in for a mulched landscape bed photo",
-    "base": "sample-mulch",
+  "kalights-crew-unpacking-dsc07628.jpg": {
+    "width": 2400,
+    "height": 1600,
+    "alt": "Kalights crew members pulling lengths of white mounting track out of a cardboard shipping box beside a lawn",
+    "base": "kalights-crew-unpacking-dsc07628",
     "sizes": [
       640,
-      1024
+      1024,
+      1920
+    ]
+  },
+  "kalights-install-eave-dsc07680.jpg": {
+    "width": 1600,
+    "height": 2400,
+    "alt": "Kalights installer standing on a ladder raising a length of white track up to the eave above a garage",
+    "base": "kalights-install-eave-dsc07680",
+    "sizes": [
+      640,
+      1024,
+      1600
+    ]
+  },
+  "kalights-install-ladder-dsc07677.jpg": {
+    "width": 1600,
+    "height": 2400,
+    "alt": "Kalights installer on a ladder holding white track level above the garage door while a teammate steadies the ladder",
+    "base": "kalights-install-ladder-dsc07677",
+    "sizes": [
+      640,
+      1024,
+      1600
+    ]
+  },
+  "rendering-backyard-pool-holiday.jpg": {
+    "width": 1254,
+    "height": 1254,
+    "alt": "Rendering of a backyard pool at night with red, green, and white lights along the house roofline",
+    "base": "rendering-backyard-pool-holiday",
+    "sizes": [
+      640,
+      1024,
+      1254
+    ]
+  },
+  "rendering-magenta-covered-patio.jpg": {
+    "width": 1086,
+    "height": 1448,
+    "alt": "Rendering of a covered patio at night bathed in magenta light under a multicolor roofline",
+    "base": "rendering-magenta-covered-patio",
+    "sizes": [
+      640,
+      1024,
+      1086
+    ]
+  },
+  "rendering-purple-and-red-ranch.jpg": {
+    "width": 1448,
+    "height": 1086,
+    "alt": "Rendering of a single-story home at dusk with purple and red rooflines beside a warm white garage",
+    "base": "rendering-purple-and-red-ranch",
+    "sizes": [
+      640,
+      1024,
+      1448
+    ]
+  },
+  "rendering-red-and-white-two-story.jpg": {
+    "width": 1086,
+    "height": 1448,
+    "alt": "Rendering of a two-story house at night washed in red light with warm white lights along its rooflines",
+    "base": "rendering-red-and-white-two-story",
+    "sizes": [
+      640,
+      1024,
+      1086
+    ]
+  },
+  "rendering-sample-home-christmas.jpg": {
+    "width": 2752,
+    "height": 1536,
+    "alt": "Rendering of a sample home with permanent lighting in Christmas, red and green bulbs alternating along the rooflines",
+    "base": "rendering-sample-home-christmas",
+    "sizes": [
+      640,
+      1024,
+      1920
+    ]
+  },
+  "rendering-sample-home-cool-white.jpg": {
+    "width": 2752,
+    "height": 1536,
+    "alt": "Rendering of a sample home with permanent lighting in Cool White, crisp white bulbs along the rooflines",
+    "base": "rendering-sample-home-cool-white",
+    "sizes": [
+      640,
+      1024,
+      1920
+    ]
+  },
+  "rendering-sample-home-fourth-of-july.jpg": {
+    "width": 2752,
+    "height": 1536,
+    "alt": "Rendering of a sample home with permanent lighting in Fourth of July, red, white and blue bulbs along the rooflines",
+    "base": "rendering-sample-home-fourth-of-july",
+    "sizes": [
+      640,
+      1024,
+      1920
+    ]
+  },
+  "rendering-sample-home-game-day.jpg": {
+    "width": 2752,
+    "height": 1536,
+    "alt": "Rendering of a sample home with permanent lighting in Game Day, blue and yellow team colors along the rooflines",
+    "base": "rendering-sample-home-game-day",
+    "sizes": [
+      640,
+      1024,
+      1920
+    ]
+  },
+  "rendering-sample-home-halloween.jpg": {
+    "width": 2752,
+    "height": 1536,
+    "alt": "Rendering of a sample home with permanent lighting in Halloween, orange and purple bulbs along the rooflines",
+    "base": "rendering-sample-home-halloween",
+    "sizes": [
+      640,
+      1024,
+      1920
+    ]
+  },
+  "rendering-sample-home-lights-off.jpg": {
+    "width": 2752,
+    "height": 1536,
+    "alt": "Rendering of a sample home with permanent lighting in Lights Off, every roofline bulb dark at dusk",
+    "base": "rendering-sample-home-lights-off",
+    "sizes": [
+      640,
+      1024,
+      1920
+    ]
+  },
+  "rendering-sample-home-party.jpg": {
+    "width": 2752,
+    "height": 1536,
+    "alt": "Rendering of a sample home with permanent lighting in Party, full color bulbs along every roofline",
+    "base": "rendering-sample-home-party",
+    "sizes": [
+      640,
+      1024,
+      1920
+    ]
+  },
+  "rendering-sample-home-warm-white.jpg": {
+    "width": 2752,
+    "height": 1536,
+    "alt": "Rendering of a sample home with permanent lighting in Warm White along every roofline at dusk",
+    "base": "rendering-sample-home-warm-white",
+    "sizes": [
+      640,
+      1024,
+      1920
+    ]
+  },
+  "rendering-spanish-style-multicolor.jpg": {
+    "width": 1672,
+    "height": 941,
+    "alt": "Rendering of a Spanish-style stucco home at night with multicolor roofline lights and warm landscape uplighting",
+    "base": "rendering-spanish-style-multicolor",
+    "sizes": [
+      640,
+      1024,
+      1672
+    ]
+  },
+  "rendering-two-story-holiday-roofline.jpg": {
+    "width": 1672,
+    "height": 941,
+    "alt": "Rendering of a two-story stucco house at night with red, green, and white lights along every roofline",
+    "base": "rendering-two-story-holiday-roofline",
+    "sizes": [
+      640,
+      1024,
+      1672
+    ]
+  },
+  "rendering-two-story-rainbow.jpg": {
+    "width": 1448,
+    "height": 1086,
+    "alt": "Rendering of a two-story house at night with its rooflines and trim lit in a full rainbow of colors",
+    "base": "rendering-two-story-rainbow",
+    "sizes": [
+      640,
+      1024,
+      1448
     ]
   }
 }

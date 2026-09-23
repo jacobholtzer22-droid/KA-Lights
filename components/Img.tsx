@@ -6,6 +6,7 @@ interface ImgProps {
   className?: string
   /** CSS sizes hint for the browser. */
   sizes?: string
+  /** Above-the-fold image: eager, high fetch priority. */
   priority?: boolean
 }
 
@@ -26,6 +27,7 @@ export default function Img({ name, className = '', sizes = '(min-width: 1024px)
       loading={priority ? 'eager' : 'lazy'}
       decoding="async"
       className={className}
+      {...(priority ? { fetchpriority: 'high' } : {})}
     />
   )
 }

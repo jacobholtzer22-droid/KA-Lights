@@ -1,24 +1,28 @@
 import Link from 'next/link'
 import { config } from '@/lib/config'
+import { focusable } from '@/lib/ui'
 
-export default function AreaList({ heading = 'Areas We Serve', exclude }: { heading?: string; exclude?: string }) {
-  const areas = config.serviceAreas.filter((a) => a.slug !== exclude)
+/**
+ * Service area cities as tiles. A city links to its own page only when it has
+ * real, city-specific content in config (`cityPage`); the rest are plain text,
+ * because a page per city with nothing specific to say is a thin page.
+ */
+export default function AreaList() {
+  const areas = config.serviceAreas
   if (areas.length === 0) return null
   return (
-    <section id="areas" className="mx-auto max-w-page px-4 py-16 md:py-24 sm:px-6">
-      <h2 className="font-heading text-3xl font-bold text-primary-dark">{heading}</h2>
-      <ul className="mt-6 flex flex-wrap gap-3">
-        {areas.map((a) => (
-          <li key={a.slug}>
-            <Link
-              href={`/areas/${a.slug}`}
-              className="inline-block rounded-full border border-line bg-surface px-4 py-2 text-sm font-medium text-ink hover:border-primary hover:text-primary"
-            >
-              {a.name}, {config.primaryState}
+    <ul className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+      {areas.map((a) => (
+        <li key={a.slug} className="rounded-card border border-line bg-bg text-center text-step-1 text-ink">
+          {a.cityPage ? (
+            <Link href={`/service-areas/${a.slug}`} className={`block px-4 py-4 transition-colors hover:text-accent-ink ${focusable}`}>
+              {a.name}
             </Link>
-          </li>
-        ))}
-      </ul>
-    </section>
+          ) : (
+            <span className="block px-4 py-4">{a.name}</span>
+          )}
+        </li>
+      ))}
+    </ul>
   )
 }

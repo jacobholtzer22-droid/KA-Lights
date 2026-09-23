@@ -3,161 +3,182 @@ import type { SiteConfigInput } from './lib/config-schema'
 /**
  * Every business fact for this site lives here and nowhere else.
  *
- * This shipped copy describes "Sample Lawn Care", a fictional business, so the
- * template builds and renders out of the box. It is a sample identity, not a
- * placeholder to edit around: scripts/verify.ts check 2 refuses to pass while
- * the slug, names, or domain still carry the sample identity, and check 3
- * confirms the slug exists on the platform. Replace every value from BRIEF.md.
- *
  * Unknown facts are null. A null field renders nothing. A guessed value is a defect.
+ *
+ * Four values below are provisional stand-ins so the config validates for the
+ * preview. Each carries the provisional marker in its comment, and the launch
+ * gate (scripts/launch-gate.mjs) fails every production build while any
+ * marker remains. Replace the value and delete the marker once the client
+ * confirms it. Open items are tracked in the client checklist in docs/.
  */
 const siteConfig = {
-  businessSlug: 'sample-lawn-care',
+  // Confirmed from the platform Business row cmtxoxv570000jv04ioz7a514. Copied character for character.
+  businessSlug: 'kalights-1789175572458',
 
-  legalName: 'Sample Lawn Care LLC',
-  displayName: 'Sample Lawn Care',
-  tagline: 'Reliable lawn care for homes across the Springfield area.',
+  legalName: 'Kalights', // PROVISIONAL: display name used as a stand-in; the registered entity name is unconfirmed (checklist item 2).
+  displayName: 'Kalights',
+  tagline: 'Your home, in any color. Every night of the year.',
 
+  // Installation only vs licensed electrical work is unconfirmed (checklist item 17).
+  // HomeAndConstructionBusiness is the parent type of Electrician, so it asserts neither.
   schemaType: 'HomeAndConstructionBusiness',
 
-  phone: '+15555550123',
-  email: 'hello@sample-lawn-care.com',
+  phone: '+19097498696',
+  email: 'kalightss@gmail.com',
 
-  address: {
-    street: '100 Sample Street',
-    city: 'Springfield',
-    state: 'IL',
-    zip: '62701',
-    lat: null,
-    lng: null,
-  },
+  address: null,
 
-  primaryCity: 'Springfield',
-  primaryState: 'IL',
+  primaryCity: 'Corona', // PROVISIONAL: first city in the current site's footer list, not client-confirmed (checklist item 11).
+  primaryState: 'CA', // PROVISIONAL: inferred, not client-confirmed (checklist item 10).
 
+  // City list from the current site, pending client confirmation (checklist item 9). No per-city pages.
+  // cityPage stays null until there is something real and specific for that city:
+  // a note about work actually done there, or a photograph taken there. A city with
+  // null gets no page of its own, only a listing on the service areas index.
   serviceAreas: [
-    { slug: 'springfield', name: 'Springfield', county: 'Sangamon County' },
-    { slug: 'chatham', name: 'Chatham', county: 'Sangamon County' },
-    { slug: 'rochester', name: 'Rochester', county: 'Sangamon County' },
-    { slug: 'sherman', name: 'Sherman', county: 'Sangamon County' },
+    { slug: 'corona', name: 'Corona', county: null, cityPage: null },
+    { slug: 'chino', name: 'Chino', county: null, cityPage: null },
+    { slug: 'chino-hills', name: 'Chino Hills', county: null, cityPage: null },
+    { slug: 'ontario', name: 'Ontario', county: null, cityPage: null },
+    { slug: 'norco', name: 'Norco', county: null, cityPage: null },
+    { slug: 'jurupa-valley', name: 'Jurupa Valley', county: null, cityPage: null },
+    { slug: 'riverside', name: 'Riverside', county: null, cityPage: null },
   ],
 
   services: [
     {
-      slug: 'lawn-mowing',
-      name: 'Lawn Mowing',
+      slug: 'permanent-architectural-lighting',
+      name: 'Permanent Architectural Lighting',
       shortDescription:
-        'Weekly and biweekly mowing with edging, trimming, and cleanup on every visit, scheduled on the same day each week.',
-      priceFrom: 45,
-      priceNote: 'per visit for a typical quarter-acre lot; larger lots quoted on site',
-      image: 'sample-mowing.jpg',
-      faqs: [
-        {
-          q: 'How often should my lawn be mowed?',
-          a: 'Most lawns in central Illinois do best on a weekly schedule from May through September, then every other week as growth slows in spring and fall. We set the schedule with you and adjust it when the weather changes.',
-        },
-        {
-          q: 'Do you bag the clippings or mulch them?',
-          a: 'We mulch clippings back into the lawn by default because it returns nutrients to the soil. If you prefer bagging, or the grass has gotten long between visits, we bag and haul the clippings away.',
-        },
-        {
-          q: 'What is included in a mowing visit?',
-          a: 'Every visit includes mowing, string trimming around obstacles, edging along walks and drives, and blowing clippings off hard surfaces. Nothing is left on your patio or driveway.',
-        },
-      ],
-    },
-    {
-      slug: 'mulch-installation',
-      name: 'Mulch Installation',
-      shortDescription:
-        'Bed edging, weed removal, and fresh hardwood or dyed mulch installed at the right depth so beds stay tidy all season.',
+        'Professionally installed, app-controlled lighting with warm white for everyday and full color for any occasion.',
       priceFrom: null,
-      priceNote: 'quoted by the yard after we measure your beds',
-      image: 'sample-mulch.jpg',
+      priceNote: 'based on the linear footage of your roofline and the complexity of the installation',
+      // Crew photo supplied by Will.
+      image: 'kalights-install-eave-dsc07680.jpg',
+      // Every Kalights-specific answer traces to the current site's own copy. General answers stay general.
       faqs: [
         {
-          q: 'How deep should mulch be installed?',
-          a: 'We install mulch two to three inches deep. Less than that lets weeds through and dries out fast; more than that can smother roots and hold too much moisture against plant stems.',
+          q: 'How is permanent architectural lighting priced?',
+          a: 'Pricing is based on the linear footage of your roofline and the complexity of the installation. Call or send the form to request a quote for your home.',
         },
         {
-          q: 'Do you remove the old mulch first?',
-          a: 'Usually not. Old mulch breaks down into the soil, so we pull weeds, redefine the bed edge, and top-dress with new mulch. If the old layer is already too deep, we remove some before installing.',
+          q: 'Can the lights change color?',
+          a: 'Yes. The system is full RGB plus warm white, so you can run warm white for everyday and full color for holidays, game days, or any occasion.',
         },
         {
-          q: 'What kind of mulch do you offer?',
-          a: 'We install natural hardwood mulch and dyed mulch in brown, black, or red. We will talk through which holds its color longest and which suits the plants in your beds before we order.',
-        },
-      ],
-    },
-    {
-      slug: 'seasonal-cleanup',
-      name: 'Seasonal Cleanup',
-      shortDescription:
-        'Spring and fall cleanups that clear leaves, cut back perennials, and get beds and lawns ready for the season ahead.',
-      priceFrom: null,
-      priceNote: 'quoted after a quick walk of the property',
-      image: 'sample-cleanup.jpg',
-      faqs: [
-        {
-          q: 'When should I schedule a fall cleanup?',
-          a: 'Once most of the leaves have dropped, which in the Springfield area is usually mid to late November. We can also do a first pass earlier in fall and a final pass after the trees are bare.',
+          q: 'How are the lights controlled?',
+          a: 'The lights are app-controlled. You tap a scene on your phone and the whole home changes.',
         },
         {
-          q: 'What does a spring cleanup include?',
-          a: 'We remove leaves and debris left from winter, cut back perennials and ornamental grasses, redefine bed edges, and haul everything away so the lawn and beds are ready for the growing season.',
+          q: 'Can I use permanent lights outside the holidays?',
+          a: 'Yes. Warm white works for everyday, and full color covers holidays, game days, or any occasion, so the same lights run all year.',
         },
         {
-          q: 'Do you haul away the debris?',
-          a: 'Yes. Everything we clear is loaded and hauled off the property the same day. You are not left with bags at the curb.',
+          q: 'How are permanent Christmas lights mounted?',
+          a: 'The lights sit in a track installed along the eaves of your roofline, where they stay up year-round instead of being hung and taken down each season.',
+        },
+        {
+          q: 'Can you see permanent lights during the day?',
+          a: 'The track and lights stay on the house all year, so they are there in daylight. How much they stand out depends on where they mount along your roofline and how the track sits against your eaves and trim. Ask about it when you request a quote.',
         },
       ],
     },
   ],
 
-  hours: [
-    { day: 'Monday', open: '08:00', close: '17:00' },
-    { day: 'Tuesday', open: '08:00', close: '17:00' },
-    { day: 'Wednesday', open: '08:00', close: '17:00' },
-    { day: 'Thursday', open: '08:00', close: '17:00' },
-    { day: 'Friday', open: '08:00', close: '17:00' },
-    { day: 'Saturday', open: '08:00', close: '12:00' },
-  ],
+  // Hours are not published yet (checklist item 12).
+  hours: null,
 
-  yearsInBusiness: 12,
+  yearsInBusiness: null,
   licenseNumber: null,
-  insured: true,
+  insured: null,
 
   reviews: [],
 
   profiles: {
     gbp: null,
-    facebook: 'https://www.facebook.com/samplelawncare',
-    instagram: null,
+    facebook: null,
+    instagram: 'https://instagram.com/kalights.usa',
     yelp: null,
   },
 
+  // Site FAQs, shown on /faq after the service FAQs.
   faqs: [
     {
-      q: 'Which areas do you serve?',
-      a: 'We serve Springfield and the surrounding communities of Chatham, Rochester, and Sherman. If you are just outside those areas, ask and we will let you know if we can fit you in.',
+      q: 'What is the difference between permanent and seasonal Christmas lights?',
+      a: 'Seasonal lights are hung before the holidays and taken down after, every year. A permanent system is mounted along the roofline and stays up, and it is app-controlled, so the same lights can run warm white for everyday and full color for holidays or game days.',
     },
     {
-      q: 'How do I get a quote?',
-      a: 'Call us or send the contact form on this site. For mowing we can often quote from the property size; for mulch and cleanups we stop by to measure and walk the property first.',
+      q: 'Do I need HOA approval for permanent lights?',
+      a: "It depends on your HOA. Many homeowner associations have rules about exterior lighting or changes to the outside of a home, so check your HOA's guidelines before you schedule an install.",
     },
     {
-      q: 'Are you insured?',
-      a: 'Yes. We carry liability insurance and are happy to provide a certificate on request before work begins.',
+      q: 'How do I get a quote for permanent lights?',
+      a: 'Call or send the quote form with a few details about your home. Pricing is based on the linear footage of your roofline and the complexity of the installation.',
+    },
+    {
+      q: 'Which cities does Kalights serve?',
+      a: "Kalights serves Corona, Chino, Chino Hills, Ontario, Norco, Jurupa Valley, and Riverside in the Inland Empire. Don't see your city? Contact us to see if we service your area.",
     },
   ],
 
+  // Hero and gallery are AI design renderings, registered in placeholders.json as
+  // "Rendering (AI, labeled)". Every one renders with a visible "Design rendering"
+  // label (verify check 23). Crew photos are real (supplied by Will).
   images: {
-    hero: 'sample-hero.jpg',
-    about: 'sample-crew.jpg',
-    gallery: ['sample-mowing.jpg', 'sample-mulch.jpg', 'sample-cleanup.jpg', 'sample-crew.jpg'],
+    hero: 'rendering-two-story-holiday-roofline.jpg',
+    about: null,
+    gallery: [
+      'rendering-spanish-style-multicolor.jpg',
+      'rendering-two-story-rainbow.jpg',
+      'rendering-backyard-pool-holiday.jpg',
+      'rendering-purple-and-red-ranch.jpg',
+      'rendering-red-and-white-two-story.jpg',
+      'rendering-magenta-covered-patio.jpg',
+    ],
+    crew: ['kalights-crew-group-dsc07608.jpg', 'kalights-crew-unpacking-dsc07628.jpg', 'kalights-crew-prep-dsc07640.jpg'],
   },
 
-  domain: 'https://www.sample-lawn-care.com',
+  // Scene names, sub-labels, colors, and glow tints match the current site. The 8 scene
+  // images are the current site's own scene images, relabeled: they are shown as a sample
+  // home with a visible "Sample home, design rendering" label, never as a Kalights job.
+  // Origin is unproven (no metadata of any kind); registered in placeholders.json with the
+  // Rendering status. Swap in photographs of a real install and the label follows the
+  // register (see the asset provenance and client checklist under docs/, item B1.4).
+  visualizer: {
+    mode: 'photo',
+    defaultScene: 'warm-white',
+    scenes: [
+      { key: 'warm-white', name: 'Warm White', description: 'Everyday elegance', colors: ['#FFD8A6'], glow: '#FFC46B', image: 'rendering-sample-home-warm-white.jpg' },
+      { key: 'cool-white', name: 'Cool White', description: 'Crisp & modern', colors: ['#EAF2FF'], glow: '#BBD9FF', image: 'rendering-sample-home-cool-white.jpg' },
+      { key: 'christmas', name: 'Christmas', description: 'Red & green classic', colors: ['#FF3B3B', '#22C55E'], glow: '#FF5A5A', image: 'rendering-sample-home-christmas.jpg' },
+      { key: 'halloween', name: 'Halloween', description: 'Orange & purple', colors: ['#FF7A18', '#8B5CF6'], glow: '#FF8A3D', image: 'rendering-sample-home-halloween.jpg' },
+      { key: 'fourth-of-july', name: 'Fourth of July', description: 'Red, white & blue', colors: ['#FF4141', '#F4F6FB', '#3B82F6'], glow: '#5B9BFF', image: 'rendering-sample-home-fourth-of-july.jpg' },
+      { key: 'game-day', name: 'Game Day', description: 'Rep your team', colors: ['#1E63FF', '#FACC15'], glow: '#FACC15', image: 'rendering-sample-home-game-day.jpg' },
+      { key: 'party', name: 'Party', description: 'Full-color chase', colors: ['#FF3B3B', '#FB923C', '#FACC15', '#22C55E', '#2DD4FF', '#6366F1', '#D946EF'], glow: '#FF3B3B', glowCycle: true, image: 'rendering-sample-home-party.jpg' },
+      { key: 'lights-off', name: 'Lights Off', description: 'Tap any scene to relight', colors: ['#1A1D26'], glow: null, image: 'rendering-sample-home-lights-off.jpg' },
+    ],
+  },
+
+  /**
+   * Google Ads conversion tracking. Verified in the AMER account (477-876-4076)
+   * on 2026-09-24. Not secret: the tag ID and both conversion labels ship in the
+   * public HTML of every page by design, which is how gtag.js works.
+   *
+   * Each label must start with this same tagId and a slash. A label carrying a
+   * different tag ID is a copy-paste error that records nothing, and the schema
+   * fails the build on it rather than letting it ship silently.
+   *
+   * Nothing here loads or fires in a preview build: the whole tag is gated on
+   * the same PREVIEW flag as noindex and the lead form (verify check 24).
+   * No `value` or `currency` is ever sent; see docs/DESIGN-DECISIONS.md #46.
+   */
+  googleAds: {
+    tagId: 'AW-18468343968',
+    quoteFormSubmitLabel: 'AW-18468343968/Tdk_CPCttYIdEKChsuZE',
+    clickToCallLabel: 'AW-18468343968/HUU6CL2ztYIdEKChsuZE',
+  },
+
+  domain: 'https://www.kalights.com', // PROVISIONAL: www is the current site's primary host (redirect check); not confirmed as the new site's destination (checklist item 13).
 } satisfies SiteConfigInput
 
 export default siteConfig

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { config } from './config'
 import type { Service, ServiceArea } from './config-schema'
-import { getImage, hasImage } from './images'
+import { getImage, shareableImage } from './images'
 
 /**
  * Title template applied by the root layout. Every builder below already
@@ -16,14 +16,14 @@ export function renderTitle(raw: string): string {
 
 export { DESCRIPTION_MAX, DESCRIPTION_MIN, TITLE_MAX, TITLE_MIN } from '@/scripts/verify-limits'
 
-export type PageKind = 'home' | 'service' | 'area' | 'services' | 'about' | 'contact' | 'privacy' | 'other'
+export type PageKind = 'home' | 'services' | 'service' | 'how' | 'gallery' | 'why' | 'service-areas' | 'city' | 'faq' | 'quote' | 'contact' | 'privacy' | 'other'
 
 export interface BuildMetadataArgs {
   kind: PageKind
   path: string
   service?: Service
   area?: ServiceArea
-  /** Overrides the derived title for kind 'other'. Ignored for home/service/area. */
+  /** Overrides the derived title for kind 'other'. */
   title?: string
   /** Page description, 140 to 160 characters. Falls back to a config-derived default. */
   description?: string
@@ -35,56 +35,77 @@ export function canonicalUrl(path: string): string {
   return new URL(path, config.domain).toString()
 }
 
+const where = () => `${config.primaryCity}, ${config.primaryState}`
+const serviceName = () => config.primaryService.name
+
 export function buildTitle(args: Pick<BuildMetadataArgs, 'kind' | 'service' | 'area' | 'title'>): string {
-  const { displayName, primaryCity, primaryState, primaryService } = config
+  const { displayName } = config
   switch (args.kind) {
     case 'home':
-      return `${displayName} | ${primaryService.name} in ${primaryCity}, ${primaryState}`
+      return `Permanent Christmas & Architectural Lighting | ${displayName}`
+    case 'services':
+      return `Permanent Outdoor Lighting Services in ${where()} | ${displayName}`
     case 'service':
       if (!args.service) throw new Error('buildTitle: kind "service" needs a service')
-      return `${args.service.name} in ${primaryCity} | ${displayName}`
-    case 'area':
-      if (!args.area) throw new Error('buildTitle: kind "area" needs an area')
-      return `${primaryService.name} in ${args.area.name}, ${primaryState} | ${displayName}`
-    case 'services':
-      return `All Services in ${primaryCity} | ${displayName}`
-    case 'about':
-      return `About ${displayName} in ${primaryCity} | ${displayName}`
+      return `Permanent Holiday Lighting in ${where()} | ${displayName}`
+    case 'how':
+      return `How Permanent Lighting Installation Works | ${displayName}`
+    case 'gallery':
+      return `${serviceName()} Design Ideas | ${displayName}`
+    case 'why':
+      return `Why ${displayName} | Permanent Architectural LED Lighting`
+    case 'service-areas':
+      return `Permanent Lighting Service Areas, Inland Empire | ${displayName}`
+    case 'city':
+      if (!args.area) throw new Error('buildTitle: kind "city" needs an area')
+      return `${serviceName()} in ${args.area.name}, ${config.primaryState} | ${displayName}`
+    case 'faq':
+      return `Permanent Lighting Questions and Answers | ${displayName}`
+    case 'quote':
+      return `Request a Permanent Lighting Quote in ${where()} | ${displayName}`
     case 'contact':
-      return `Contact ${displayName} in ${primaryCity} | ${displayName}`
+      return `Contact ${displayName} | Permanent Lighting in ${where()}`
     case 'privacy':
-      return `Privacy Policy and Data Use | ${displayName}`
+      return `Privacy Policy and Text Message Consent | ${displayName}`
     case 'other':
       if (!args.title) throw new Error('buildTitle: kind "other" needs a title')
       return `${args.title} | ${displayName}`
   }
 }
 
-/**
- * Default descriptions built from config. Content files can override these in
- * frontmatter; verify.ts checks the rendered length either way.
- */
+/** Descriptions built from config so a changed city or name can never leave stale copy behind. verify.ts measures each. */
 export function defaultDescription(args: Pick<BuildMetadataArgs, 'kind' | 'service' | 'area'>): string {
-  const { displayName, primaryCity, primaryState, primaryService, phoneDisplay } = config
-  const services = config.services.map((s) => s.name.toLowerCase())
-  const list = services.length > 1 ? `${services.slice(0, -1).join(', ')} and ${services.at(-1)}` : services[0]
+  const { displayName } = config
+  const lower = serviceName().toLowerCase()
+  const cities = config.serviceAreas.map((a) => a.name)
+  const cityList = cities.length > 1 ? `${cities.slice(0, -1).join(', ')}, and ${cities.at(-1)}` : (cities[0] ?? '')
   switch (args.kind) {
     case 'home':
-      return `${displayName} provides ${list} for homes in ${primaryCity}, ${primaryState} and nearby towns. Call ${phoneDisplay} or request a free quote online.`
-    case 'service':
-      return `${args.service?.shortDescription ?? ''} Serving ${primaryCity}, ${primaryState}. Call ${displayName} at ${phoneDisplay} for a free quote.`
-    case 'area':
-      return `${displayName} offers ${list} in ${args.area?.name ?? primaryCity}, ${primaryState}. Local crew, clear quotes, and reliable scheduling. Call ${phoneDisplay} to get started.`
+      return `${displayName} installs permanent Christmas and architectural lighting in ${where()} and the Inland Empire: app-controlled warm white and full color all year.`
     case 'services':
-      return `See every service ${displayName} offers in ${primaryCity}, ${primaryState}: ${list}. Each page explains what is included and answers common questions.`
-    case 'about':
-      return `Meet ${displayName}, the local crew behind ${primaryService.name.toLowerCase()} in ${primaryCity}, ${primaryState}. Learn how we work and why neighbors keep calling us back.`
+      return `Permanent outdoor lighting from ${displayName} in ${where()} and the Inland Empire: roofline lights in app-controlled warm white and full color. See what is included.`
+    case 'service':
+      return `Permanent holiday lighting in ${where()} from ${displayName}: how the track mounts, app control, what affects cost, HOA rules, and permanent versus seasonal lights.`
+    case 'how':
+      return `How permanent lighting installation works with ${displayName} in ${where()}: request a quote, get a custom design, have the track mounted, and control it by phone.`
+    case 'gallery':
+      return `${serviceName()} design ideas for ${where()} homes: concept renderings of warm white and full color rooflines, not photos of completed jobs.`
+    case 'why':
+      return `Why ${displayName} for ${lower} in ${where()} and the Inland Empire: professionally installed, app-controlled, warm white and full color.`
+    case 'service-areas':
+      return `${displayName} installs ${lower} in ${cityList}. Don't see your city? Ask us.`
+    case 'city':
+      return `${displayName} installs ${lower} in ${args.area?.name ?? where()}, ${config.primaryState} and across the Inland Empire. See work in ${args.area?.name ?? where()} and request a quote.`
+    case 'quote':
+      return `Request a permanent lighting quote from ${displayName} in ${where()} and the Inland Empire. Send a few details about your home and we will follow up.`
+    case 'faq':
+      return `Answers about permanent Christmas and holiday lights from ${displayName} in ${where()}: cost, mounting, daytime look, app control, HOA rules, and cities we serve.`
     case 'contact':
-      return `Contact ${displayName} for ${primaryService.name.toLowerCase()} and more in ${primaryCity}, ${primaryState}. Call ${phoneDisplay} or send a message to request a free quote.`
+      return `Contact ${displayName} about ${lower} in ${where()} and the Inland Empire. Call or send the form to request a quote for your home.`
     case 'privacy':
-      return `How ${displayName} handles the information you share through this website, including contact form details, text message consent, and how to reach us about it.`
+      return `How ${displayName} handles the information you share through this website, including contact form details, text message consent, and how to reach us.`
     case 'other':
-      return `${displayName} serves ${primaryCity}, ${primaryState} and the surrounding area. Call ${phoneDisplay} or send a message through the contact form to request a free quote.`
+      return `${displayName} installs ${lower} in ${where()} and the Inland Empire. Call or send the form to request a quote for your home today.`
   }
 }
 
@@ -102,8 +123,9 @@ export function buildMetadata(args: BuildMetadataArgs): BuiltMetadata {
   const description = args.description ?? defaultDescription(args)
   const url = canonicalUrl(args.path)
 
-  const imageName = args.image ?? config.images.hero
-  const ogImage = imageName && hasImage(imageName) ? getImage(imageName) : null
+  // Renderings never become the share image (see shareableImage).
+  const imageName = shareableImage([args.image, config.images.hero, ...config.images.crew])
+  const ogImage = imageName ? getImage(imageName) : null
 
   const metadata: Metadata = {
     title: { absolute: renderedTitle },

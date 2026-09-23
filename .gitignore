@@ -27,3 +27,6 @@ next-env.d.ts
 
 # local tooling
 .claude/
+
+# Raw client photo drop. Only sanitized copies go in public/images/originals.
+KaLights Photos/

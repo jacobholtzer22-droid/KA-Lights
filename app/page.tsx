@@ -1,45 +1,56 @@
 import type { Metadata } from 'next'
-import AreaList from '@/components/AreaList'
-import Credentials from '@/components/Credentials'
-import CtaBand from '@/components/CtaBand'
-import FaqAccordion from '@/components/FaqAccordion'
-import Gallery from '@/components/Gallery'
+import CrewSection from '@/components/CrewSection'
+import DifferenceSection from '@/components/DifferenceSection'
+import FeatureCards from '@/components/FeatureCards'
+import GalleryTeaser from '@/components/GalleryTeaser'
 import Hero from '@/components/Hero'
 import JsonLd from '@/components/JsonLd'
-import Reviews from '@/components/Reviews'
-import ServiceGrid from '@/components/ServiceGrid'
-import { config } from '@/lib/config'
-import { loadContent, readFrontmatter } from '@/lib/content'
-import { faqPage, localBusiness, organization, website } from '@/lib/schema'
+import ProcessSteps from '@/components/ProcessSteps'
+import QuoteSection from '@/components/QuoteSection'
+import ServiceAreaStrip from '@/components/ServiceAreaStrip'
+import TrustStrip from '@/components/TrustStrip'
+import VisualizerSection from '@/components/VisualizerSection'
+import { localBusiness, organization, website } from '@/lib/schema'
 import { buildMetadata } from '@/lib/seo'
 
-const CONTENT = 'home.mdx'
-
 export function generateMetadata(): Metadata {
-  const fm = readFrontmatter(CONTENT)
-  return buildMetadata({ kind: 'home', path: '/', description: fm.description, image: fm.image }).metadata
+  return buildMetadata({ kind: 'home', path: '/' }).metadata
 }
 
-export default async function HomePage() {
-  const { content } = await loadContent(CONTENT)
+/** Section order matches the current site. Sections whose copy is entirely held render nothing. */
+export default function HomePage() {
   return (
     <>
       <JsonLd data={localBusiness()} />
       <JsonLd data={organization()} />
       <JsonLd data={website()} />
-      <JsonLd data={faqPage(config.faqs)} />
 
       <Hero />
-      <div className="mx-auto max-w-page px-4 sm:px-6">
-        <Credentials className="mt-8" />
+      <TrustStrip />
+      {/*
+        Order differs by width, so each gets what it needs:
+        - Phones lead with the thing visitors came to play with (the visualizer stage),
+          because the crew band pushed the visualizer 2.8 screens down.
+        - From lg the crew band comes first, directly under the hero, as on desktop before.
+        Source order follows the phone layout, so the reading and tab order match what most
+        visitors see; a desktop keyboard user meets the crew band after the stage instead of
+        before it. Section grounds alternate base / alt for rhythm.
+      */}
+      <div className="flex flex-col">
+        <div className="order-1 lg:order-2">
+          <VisualizerSection />
+        </div>
+        {/* The crew photos are the only real images on the site, so they stay high in both layouts. */}
+        <div className="order-2 lg:order-1">
+          <CrewSection tone="alt" />
+        </div>
       </div>
-      <article className="mx-auto max-w-3xl px-4 pt-6 sm:px-6">{content}</article>
-      <ServiceGrid />
-      <Gallery />
-      <Reviews />
-      <AreaList />
-      <FaqAccordion faqs={config.faqs} />
-      <CtaBand />
+      <ServiceAreaStrip tone="base" />
+      <FeatureCards tone="alt" />
+      <GalleryTeaser tone="base" />
+      <ProcessSteps tone="alt" />
+      <DifferenceSection />
+      <QuoteSection tone="base" />
     </>
   )
 }

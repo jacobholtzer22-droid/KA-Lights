@@ -4,20 +4,20 @@ import Phone from './Phone'
 /** Phone always; email, address, and hours only when known. */
 export default function ContactDetails() {
   return (
-    <div className="rounded-site border border-line bg-surface p-6 text-sm">
-      <h2 className="font-heading text-xl font-semibold text-primary-dark">Reach {config.displayName}</h2>
+    <div className="rounded-site border border-line bg-surface p-6 text-step--1">
+      <h2 className="font-heading text-step-1 font-semibold text-ink">Reach {config.displayName}</h2>
       <dl className="mt-4 space-y-3">
         <div>
           <dt className="font-semibold text-ink">Phone</dt>
           <dd>
-            <Phone className="text-primary" />
+            <Phone className="text-accent-ink" />
           </dd>
         </div>
         {config.email && (
           <div>
             <dt className="font-semibold text-ink">Email</dt>
             <dd>
-              <a href={`mailto:${config.email}`} className="text-primary underline-offset-2 hover:underline">
+              <a href={`mailto:${config.email}`} className="text-accent-ink underline-offset-2 hover:underline">
                 {config.email}
               </a>
             </dd>

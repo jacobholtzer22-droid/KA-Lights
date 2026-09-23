@@ -1,6 +1,6 @@
 import { config } from './config'
 import type { Faq, Service, ServiceArea, SiteConfig } from './config-schema'
-import { getImage, hasImage } from './images'
+import { getImage, shareableImage } from './images'
 
 /**
  * JSON-LD builders. Pure functions of config; no side effects, no authoring.
@@ -33,8 +33,10 @@ function sameAs(c: SiteConfig): string[] {
   return Object.values(c.profiles).filter((v): v is string => typeof v === 'string' && v.length > 0)
 }
 
+/** Renderings are never the business image in schema (see shareableImage). */
 function heroImageUrl(c: SiteConfig): string | null {
-  return c.images.hero && hasImage(c.images.hero) ? absolute(getImage(c.images.hero).src) : null
+  const name = shareableImage([c.images.hero, ...c.images.crew])
+  return name ? absolute(getImage(name).src) : null
 }
 
 function areaServed(areas: readonly ServiceArea[]): Json[] {
@@ -149,7 +151,8 @@ export function website(): Json {
 
 export function service(s: Service): Json {
   const c = config
-  const img = s.image && hasImage(s.image) ? absolute(getImage(s.image).src) : null
+  const imgName = shareableImage([s.image])
+  const img = imgName ? absolute(getImage(imgName).src) : null
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',

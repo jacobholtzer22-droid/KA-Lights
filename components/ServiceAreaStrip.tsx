@@ -1,18 +1,18 @@
 import { config } from '@/lib/config'
 import { homeCopy } from '@/lib/page-content'
 import { eyebrowClass } from './Eyebrow'
-import Section from './Section'
+import Section, { type SectionTone } from './Section'
 
 /**
  * The real city list in crawlable text. On the current site this is a
  * scrolling marquee; motion arrives in Phase 4, so it renders static here. The
  * eyebrow is promoted to the section's <h2> with no visual change.
  */
-export default function ServiceAreaStrip() {
+export default function ServiceAreaStrip({ tone = 'base' }: { tone?: SectionTone } = {}) {
   const eyebrow = homeCopy.serviceAreas.eyebrow
   if (config.serviceAreas.length === 0) return null
   return (
-    <Section tight labelledBy={eyebrow ? 'service-areas-heading' : undefined} label={eyebrow ? undefined : 'Service areas'}>
+    <Section tone={tone} tight labelledBy={eyebrow ? 'service-areas-heading' : undefined} label={eyebrow ? undefined : 'Service areas'}>
       {eyebrow && (
         <h2 id="service-areas-heading" className={`text-center ${eyebrowClass}`}>
           {eyebrow}

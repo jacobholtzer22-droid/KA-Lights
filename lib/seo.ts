@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import { config } from './config'
-import type { Service } from './config-schema'
-import { getImage, hasImage } from './images'
+import type { Service, ServiceArea } from './config-schema'
+import { getImage, shareableImage } from './images'
+// Re-exported below as well; imported here because a re-export does not bind locally.
+import { DESCRIPTION_MAX, DESCRIPTION_MIN } from '@/scripts/verify-limits'
 
 /**
  * Title template applied by the root layout. Every builder below already
@@ -16,12 +18,13 @@ export function renderTitle(raw: string): string {
 
 export { DESCRIPTION_MAX, DESCRIPTION_MIN, TITLE_MAX, TITLE_MIN } from '@/scripts/verify-limits'
 
-export type PageKind = 'home' | 'services' | 'service' | 'how' | 'gallery' | 'why' | 'service-areas' | 'faq' | 'contact' | 'privacy' | 'other'
+export type PageKind = 'home' | 'services' | 'service' | 'how' | 'gallery' | 'why' | 'service-areas' | 'city' | 'faq' | 'quote' | 'contact' | 'privacy' | 'other'
 
 export interface BuildMetadataArgs {
   kind: PageKind
   path: string
   service?: Service
+  area?: ServiceArea
   /** Overrides the derived title for kind 'other'. */
   title?: string
   /** Page description, 140 to 160 characters. Falls back to a config-derived default. */
@@ -37,26 +40,36 @@ export function canonicalUrl(path: string): string {
 const where = () => `${config.primaryCity}, ${config.primaryState}`
 const serviceName = () => config.primaryService.name
 
-export function buildTitle(args: Pick<BuildMetadataArgs, 'kind' | 'service' | 'title'>): string {
+export function buildTitle(args: Pick<BuildMetadataArgs, 'kind' | 'service' | 'area' | 'title'>): string {
   const { displayName } = config
   switch (args.kind) {
     case 'home':
-      return `${displayName} | ${serviceName()} in ${where()}`
+      return `Permanent Christmas & Architectural Lighting | ${displayName}`
     case 'services':
-      return `${serviceName()} Services | ${displayName}`
+      return `Permanent Outdoor Lighting Services in ${where()} | ${displayName}`
     case 'service':
       if (!args.service) throw new Error('buildTitle: kind "service" needs a service')
-      return `${args.service.name} in ${where()} | ${displayName}`
+      return `Permanent Holiday Lighting in ${where()} | ${displayName}`
     case 'how':
       return `How Permanent Lighting Installation Works | ${displayName}`
     case 'gallery':
-      return `${serviceName()} Gallery | ${displayName}`
+      return `${serviceName()} Design Ideas | ${displayName}`
     case 'why':
       return `Why ${displayName} | Permanent Architectural LED Lighting`
     case 'service-areas':
       return `Permanent Lighting Service Areas, Inland Empire | ${displayName}`
+    case 'city': {
+      // "Permanent Architectural Lighting in <city>, CA | Kalights" runs past the 60-char
+      // limit on the longer city names (Jurupa Valley, Chino Hills), so the city titles use
+      // the shorter service phrase. 45 characters of frame plus the city name keeps all
+      // seven inside 50 to 60 (verify check 13 measures every one).
+      if (!args.area) throw new Error('buildTitle: kind "city" needs an area')
+      return `Permanent Christmas Lights in ${args.area.name}, ${config.primaryState} | ${displayName}`
+    }
     case 'faq':
-      return `${serviceName()} Questions | ${displayName}`
+      return `Permanent Lighting Questions and Answers | ${displayName}`
+    case 'quote':
+      return `Request a Permanent Lighting Quote in ${where()} | ${displayName}`
     case 'contact':
       return `Contact ${displayName} | Permanent Lighting in ${where()}`
     case 'privacy':
@@ -68,28 +81,63 @@ export function buildTitle(args: Pick<BuildMetadataArgs, 'kind' | 'service' | 't
 }
 
 /** Descriptions built from config so a changed city or name can never leave stale copy behind. verify.ts measures each. */
-export function defaultDescription(args: Pick<BuildMetadataArgs, 'kind' | 'service'>): string {
+export function defaultDescription(args: Pick<BuildMetadataArgs, 'kind' | 'service' | 'area'>): string {
   const { displayName } = config
   const lower = serviceName().toLowerCase()
   const cities = config.serviceAreas.map((a) => a.name)
   const cityList = cities.length > 1 ? `${cities.slice(0, -1).join(', ')}, and ${cities.at(-1)}` : (cities[0] ?? '')
   switch (args.kind) {
     case 'home':
-      return `${displayName} installs ${lower} in ${where()} and across the Inland Empire: app-controlled warm white and full color. Request a quote.`
+      return `${displayName} installs permanent Christmas and architectural lighting in ${where()} and the Inland Empire: app-controlled warm white and full color all year.`
     case 'services':
-      return `${displayName} offers ${lower} in ${where()} and the Inland Empire. See what the service includes, how pricing works, and common questions.`
+      return `Permanent outdoor lighting from ${displayName} in ${where()} and the Inland Empire: roofline lights in app-controlled warm white and full color. See what is included.`
     case 'service':
-      return `${args.service?.name ?? serviceName()} in ${where()} from ${displayName}: professionally installed and app-controlled, priced by the linear footage of your roofline.`
+      return `Permanent holiday lighting in ${where()} from ${displayName}: how the track mounts, app control, what affects cost, HOA rules, and permanent versus seasonal lights.`
     case 'how':
-      return `How ${displayName} handles ${lower} for homes in ${where()} and the Inland Empire, from custom design to professional installation.`
+      return `How permanent lighting installation works with ${displayName} in ${where()}: request a quote, get a custom design, have the track mounted, and control it by phone.`
     case 'gallery':
-      return `Gallery of ${lower} from ${displayName} in ${where()} and the Inland Empire, with warm white for everyday and full color for any occasion.`
+      return `${serviceName()} design ideas for ${where()} homes: concept renderings of warm white and full color rooflines, not photos of completed jobs.`
     case 'why':
       return `Why ${displayName} for ${lower} in ${where()} and the Inland Empire: professionally installed, app-controlled, warm white and full color.`
     case 'service-areas':
       return `${displayName} installs ${lower} in ${cityList}. Don't see your city? Ask us.`
+    case 'city': {
+      // Built from that city's own facts, so no two city descriptions are the same
+      // sentence with a token swapped. The window is 140 to 160 characters (check 14),
+      // and city names, neighborhood counts and county names vary enough that no single
+      // template hits it: Corona has six neighborhoods, Norco has two. So the builder
+      // searches over how many neighborhoods to name and which closing clause to use,
+      // and takes the longest result that fits. Nothing is padded with filler; every
+      // candidate clause is a true statement about the service.
+      const area = args.area
+      const detail = area?.cityPage?.localDetail
+      if (!area || !detail) return `${displayName} installs ${lower} in ${where()} and the Inland Empire. Call or send the form to request a quote for your home today.`
+      const closings = [
+        ' App-controlled warm white and full color, all year. Request a quote.',
+        ' App-controlled warm white and full color, all year.',
+        ' Warm white for everyday, full color for the holidays.',
+        ' Request a quote for your roofline.',
+        ' Request a quote.',
+        '',
+      ]
+      let best = ''
+      for (let n = detail.neighborhoods.length; n >= 1; n--) {
+        const head = `${displayName} installs ${lower} on ${area.name}, ${config.primaryState} homes in ${detail.neighborhoods.slice(0, n).join(', ')}, ${detail.county} County.`
+        for (const close of closings) {
+          const candidate = head + close
+          if (candidate.length > DESCRIPTION_MAX) continue
+          if (candidate.length >= DESCRIPTION_MIN) return candidate
+          if (candidate.length > best.length) best = candidate
+        }
+      }
+      // Nothing landed in the window; return the longest that fits the cap and let
+      // check 14 say so rather than shipping something silently short.
+      return best
+    }
+    case 'quote':
+      return `Request a permanent lighting quote from ${displayName} in ${where()} and the Inland Empire. Send a few details about your home and we will follow up.`
     case 'faq':
-      return `Answers about ${lower} from ${displayName} in ${where()}: how pricing works, color options, app control, and which cities we serve.`
+      return `Answers about permanent Christmas and holiday lights from ${displayName} in ${where()}: cost, mounting, daytime look, app control, HOA rules, and cities we serve.`
     case 'contact':
       return `Contact ${displayName} about ${lower} in ${where()} and the Inland Empire. Call or send the form to request a quote for your home.`
     case 'privacy':
@@ -113,8 +161,9 @@ export function buildMetadata(args: BuildMetadataArgs): BuiltMetadata {
   const description = args.description ?? defaultDescription(args)
   const url = canonicalUrl(args.path)
 
-  const imageName = args.image ?? config.images.hero
-  const ogImage = imageName && hasImage(imageName) ? getImage(imageName) : null
+  // Renderings never become the share image (see shareableImage).
+  const imageName = shareableImage([args.image, config.images.hero, ...config.images.crew])
+  const ogImage = imageName ? getImage(imageName) : null
 
   const metadata: Metadata = {
     title: { absolute: renderedTitle },

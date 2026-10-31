@@ -24,11 +24,11 @@ export default function ServiceAreasPage() {
       <JsonLd data={breadcrumbList(CRUMBS)} />
       <PageHeader display={areasCopy.display} title={pageH1.serviceAreas()} intro={pageIntro()} lead={areasCopy.lead} />
       <Panel className="text-center">
-        <MapPinIcon className="mx-auto h-10 w-10 text-accent" />
+        <MapPinIcon className="mx-auto h-10 w-10 text-accent-ink" />
         <div className="mt-8 text-left">
           <AreaList />
         </div>
-        {areasCopy.closing && <p className="mt-8 text-ink-soft">{areasCopy.closing}</p>}
+        {areasCopy.closing && <p className="mx-auto mt-8 max-w-measure text-ink-soft">{areasCopy.closing}</p>}
       </Panel>
     </>
   )

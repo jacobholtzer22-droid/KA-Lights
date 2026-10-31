@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, useState } from 'react'
 import { CONTACT_ENDPOINT } from '@/lib/config'
+import { ADS, reportConversion } from '@/lib/tracking'
 import ContactForm from './ContactForm'
 
 /**
@@ -48,6 +49,39 @@ if (MODE !== 'live' && typeof window !== 'undefined') {
   }
 }
 
+/**
+ * Quote Form Submit conversion, live builds only.
+ *
+ * THE SUCCESS MESSAGE IS NOT EVIDENCE OF A LEAD. The sealed ContactForm never
+ * reads the response status: it renders "Thanks, we received your message." on a
+ * 500 exactly as it does on a 200 (logged as B3 / T-1). Hanging the conversion
+ * off that message, or off the submit event, would report failed submissions to
+ * Google as leads and quietly poison the account's optimization data.
+ *
+ * So the conversion keys on the only honest signal available without opening the
+ * sealed file: the HTTP response itself. The same interception the preview guard
+ * uses is extended here to inspect the contact endpoint's response and report
+ * ONLY on a 2xx. Everything else reports nothing: 4xx, 5xx, a network failure, a
+ * CORS rejection, and an opaque (no-cors) response, whose status is 0 and whose
+ * `ok` is false.
+ *
+ * The response object is returned untouched, and a rejection still rejects, so
+ * the sealed form behaves exactly as it does with no tracking present.
+ */
+if (MODE === 'live' && ADS && typeof window !== 'undefined') {
+  const ads = ADS
+  const guarded = window as Window & { __leadConversionGuard?: true }
+  if (!guarded.__leadConversionGuard) {
+    guarded.__leadConversionGuard = true
+    const original = window.fetch.bind(window)
+    window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+      const response = await original(input, init)
+      if (response.ok && isContactEndpoint(input)) reportConversion(ads.quoteFormSubmitLabel)
+      return response
+    }
+  }
+}
+
 type Message = { kind: 'error' | 'notice'; text: string }
 
 function PreviewLeadForm() {
@@ -79,7 +113,7 @@ function PreviewLeadForm() {
 
   return (
     <div ref={attach} data-lead-form-mode="preview-disabled">
-      <p className="mb-4 rounded-site border border-warm px-4 py-3 text-step--1 text-ink">
+      <p className="mb-4 max-w-measure rounded-site border border-warm px-4 py-3 text-step--1 text-ink">
         Preview build: this form checks your entries but does not send them. Submissions open at launch.
       </p>
       <ContactForm />

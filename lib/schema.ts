@@ -1,6 +1,6 @@
 import { config } from './config'
 import type { Faq, Service, ServiceArea, SiteConfig } from './config-schema'
-import { getImage, hasImage } from './images'
+import { getImage, shareableImage } from './images'
 
 /**
  * JSON-LD builders. Pure functions of config; no side effects, no authoring.
@@ -33,8 +33,10 @@ function sameAs(c: SiteConfig): string[] {
   return Object.values(c.profiles).filter((v): v is string => typeof v === 'string' && v.length > 0)
 }
 
+/** Renderings are never the business image in schema (see shareableImage). */
 function heroImageUrl(c: SiteConfig): string | null {
-  return c.images.hero && hasImage(c.images.hero) ? absolute(getImage(c.images.hero).src) : null
+  const name = shareableImage([c.images.hero, ...c.images.crew])
+  return name ? absolute(getImage(name).src) : null
 }
 
 function areaServed(areas: readonly ServiceArea[]): Json[] {
@@ -149,7 +151,8 @@ export function website(): Json {
 
 export function service(s: Service): Json {
   const c = config
-  const img = s.image && hasImage(s.image) ? absolute(getImage(s.image).src) : null
+  const imgName = shareableImage([s.image])
+  const img = imgName ? absolute(getImage(imgName).src) : null
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -173,6 +176,27 @@ export function service(s: Service): Json {
 }
 
 /** Returns null for an empty list so a page never emits an empty FAQPage. */
+/**
+ * The Service, scoped to one city, for that city's page. areaServed is that city
+ * and nothing else, which is the only thing that makes it different from the
+ * service page's node, and provider points at the one LocalBusiness rather than
+ * repeating it. No address: none is published, and a city page is not a place
+ * of business (decision 47).
+ */
+export function cityService(area: ServiceArea, s: Service = config.primaryService): Json {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': `${absolute(`/service-areas/${area.slug}`)}#service`,
+    name: `${s.name} in ${area.name}, ${config.primaryState}`,
+    serviceType: s.name,
+    description: s.shortDescription,
+    url: absolute(`/service-areas/${area.slug}`),
+    provider: { '@id': BUSINESS_ID() },
+    areaServed: { '@type': 'City', name: area.name },
+  }
+}
+
 export function faqPage(faqs: readonly Faq[]): Json | null {
   if (faqs.length === 0) return null
   return {

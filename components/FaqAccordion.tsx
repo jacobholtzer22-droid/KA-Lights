@@ -1,4 +1,5 @@
 import type { Faq } from '@/lib/config-schema'
+import { focusable } from '@/lib/ui'
 
 /**
  * Native <details> accordion, no JavaScript. The questions rendered here are the
@@ -13,15 +14,15 @@ export default function FaqAccordion({ faqs, heading = 'Frequently Asked Questio
       <div className="space-y-4">
         {faqs.map((f) => (
           <details key={f.q} className="group rounded-card border border-line bg-surface px-6 py-5">
-            <summary className="cursor-pointer list-none font-heading text-step-1 font-semibold text-ink">
+            <summary className={`cursor-pointer list-none font-heading text-step-1 font-semibold text-ink transition-colors hover:text-accent-ink ${focusable}`}>
               <span className="flex items-center justify-between gap-4">
                 {f.q}
-                <span aria-hidden="true" className="text-accent group-open:rotate-45">
+                <span aria-hidden="true" className="text-accent-ink group-open:rotate-45">
                   +
                 </span>
               </span>
             </summary>
-            <p className="mt-3 text-ink-soft">{f.a}</p>
+            <p className="mt-3 max-w-measure text-ink-soft">{f.a}</p>
           </details>
         ))}
       </div>

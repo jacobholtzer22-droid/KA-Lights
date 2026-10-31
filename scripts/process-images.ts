@@ -4,7 +4,8 @@ import sharp from 'sharp'
 
 /**
  * Converts everything in public/images/originals/ to WebP at 640/1024/1920
- * (never wider than the original) and writes public/images/manifest.json.
+ * (never wider than the original, plus the original's own width when it falls
+ * between two of those) and writes public/images/manifest.json.
  *
  * The manifest is keyed by ORIGINAL FILENAME, never by array position. A
  * previous project shipped nine alts shifted by one because they were
@@ -80,7 +81,10 @@ async function main() {
     const height = swap ? meta.width : meta.height
 
     const targets = WIDTHS.filter((w) => w <= width)
-    if (targets.length === 0) targets.push(width)
+    // An original between two standard widths (for example 1672px) also gets a
+    // rendition at its own width, so a full-bleed image is not capped at 1024px.
+    const largest = targets.at(-1)
+    if (largest === undefined || (width > largest && targets.length < WIDTHS.length)) targets.push(width)
 
     for (const w of targets) {
       const out = path.join(PROCESSED, `${base}-${w}.webp`)

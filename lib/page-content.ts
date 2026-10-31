@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import faqRaw from '@/content/pages/faq.json'
+import quoteRaw from '@/content/pages/quote.json'
 import galleryRaw from '@/content/pages/gallery.json'
 import homeRaw from '@/content/pages/home.json'
 import howRaw from '@/content/pages/how-it-works.json'
@@ -34,9 +35,8 @@ const home = z.object({
     cards: z.array(z.object({ icon: z.enum(['ladder', 'palette', 'eye', 'season']), title: slot, body: slot })),
   }),
   galleryTeaser: z.object({ heading: slot, subheading: slot, cta: z.string().min(1) }),
-  app: z.object({ heading: slot, body: slot, bullets: z.array(z.string().min(1)) }),
   crew: z.object({ eyebrow: slot, heading: slot, body: slot }),
-  process: z.object({ heading: slot, steps: z.array(step) }),
+  process: z.object({ heading: slot }),
   difference: z.object({
     eyebrow: slot,
     heading: slot,
@@ -63,8 +63,15 @@ export type Step = z.output<typeof step>
 
 export const siteCopy = parse(z.object({ footerBlurb: slot }), siteRaw, 'site.json')
 export const homeCopy = parse(home, homeRaw, 'home.json')
-export const howCopy = parse(simplePage.extend({ steps: z.array(step) }), howRaw, 'how-it-works.json')
+/** How-it-works steps may carry one real photograph (manifest filename) that shows that step. */
+const howStep = step.extend({
+  image: z.string().min(1).nullable().default(null),
+  icon: z.enum(['quote', 'design', 'install', 'app']).nullable().default(null),
+})
+
+export const howCopy = parse(simplePage.extend({ steps: z.array(howStep) }), howRaw, 'how-it-works.json')
 export const galleryCopy = parse(simplePage, galleryRaw, 'gallery.json')
 export const whyCopy = parse(simplePage.extend({ sections: z.array(z.object({ heading: slot, body: slot })) }), whyRaw, 'why-kalights.json')
 export const areasCopy = parse(simplePage.extend({ closing: slot }), areasRaw, 'service-areas.json')
 export const faqCopy = parse(simplePage, faqRaw, 'faq.json')
+export const quoteCopy = parse(simplePage, quoteRaw, 'quote.json')

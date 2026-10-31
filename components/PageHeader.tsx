@@ -9,7 +9,7 @@ import Highlight from './Highlight'
  */
 export default function PageHeader({
   display,
-  highlightClass = 'text-accent',
+  highlightClass = 'text-accent-ink',
   title,
   intro,
   lead,
@@ -22,8 +22,8 @@ export default function PageHeader({
 }) {
   return (
     <section className="relative isolate overflow-hidden">
-      <div aria-hidden="true" className="absolute inset-0 -z-10" style={{ background: 'radial-gradient(ellipse at top, rgba(45, 212, 255, 0.08), transparent 60%)' }} />
-      <div className="mx-auto max-w-4xl px-4 pb-10 pt-16 text-center md:pt-24 lg:px-8">
+      <div aria-hidden="true" className="absolute inset-0 -z-10" style={{ background: 'var(--page-glow)' }} />
+      <div className="mx-auto max-w-4xl px-4 pb-12 pt-16 text-center md:pb-16 md:pt-24 lg:px-8">
         {display ? (
           <>
             <p className="font-heading text-page font-bold text-ink">
@@ -34,8 +34,8 @@ export default function PageHeader({
         ) : (
           <h1 className="font-heading text-page font-bold text-ink">{title}</h1>
         )}
-        {intro && <p className="mx-auto mt-4 max-w-2xl text-step-1 text-ink-soft">{intro}</p>}
-        {lead && <p className="mx-auto mt-3 max-w-2xl text-step-1 text-ink-soft">{lead}</p>}
+        {intro && <p className="mx-auto mt-4 max-w-measure text-step-1 text-ink-soft">{intro}</p>}
+        {lead && <p className="mx-auto mt-3 max-w-measure text-step-1 text-ink-soft">{lead}</p>}
       </div>
     </section>
   )

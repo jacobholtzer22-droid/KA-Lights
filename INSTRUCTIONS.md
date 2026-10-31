@@ -1,0 +1,1 @@
+Kalights (Will): add the 2 real photos now on the intake (4484.jpg and 4485.jpg, dusk patio shots with string lights and eave lighting) to the site's photo gallery. If the current hero image is a stock photo, replace it with 4484.jpg; otherwise leave the hero as is. Change nothing else: no copy, no services, no layout, no config changes. Open a PR; do not merge.

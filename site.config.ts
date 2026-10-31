@@ -96,7 +96,14 @@ const siteConfig = {
   images: {
     hero: 'placeholder-hero.jpg',
     about: null,
-    gallery: ['placeholder-gallery-1.jpg', 'placeholder-gallery-2.jpg', 'placeholder-gallery-3.jpg', 'placeholder-gallery-4.jpg'],
+    gallery: [
+      'backyard-patio-at-dusk-with-string-lights-strung-overhead-an.jpg',
+      'covered-patio-at-dusk-with-lights-installed-along-the-cover-.jpg',
+      'placeholder-gallery-1.jpg',
+      'placeholder-gallery-2.jpg',
+      'placeholder-gallery-3.jpg',
+      'placeholder-gallery-4.jpg',
+    ],
     crew: ['placeholder-crew-1.jpg', 'placeholder-crew-2.jpg', 'placeholder-crew-3.jpg'],
   },
 

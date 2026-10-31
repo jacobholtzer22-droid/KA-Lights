@@ -1,4 +1,24 @@
 {
+  "backyard-patio-at-dusk-with-string-lights-strung-overhead-an.jpg": {
+    "width": 1536,
+    "height": 2048,
+    "alt": "Backyard patio at dusk with string lights overhead and warm white lights along the eaves and patio cover",
+    "base": "backyard-patio-at-dusk-with-string-lights-strung-overhead-an",
+    "sizes": [
+      640,
+      1024
+    ]
+  },
+  "covered-patio-at-dusk-with-lights-installed-along-the-cover-.jpg": {
+    "width": 1536,
+    "height": 2048,
+    "alt": "Covered patio at dusk with lights along the cover edge, a ceiling light over seating, and landscape uplights",
+    "base": "covered-patio-at-dusk-with-lights-installed-along-the-cover",
+    "sizes": [
+      640,
+      1024
+    ]
+  },
   "placeholder-crew-1.jpg": {
     "width": 1500,
     "height": 1000,

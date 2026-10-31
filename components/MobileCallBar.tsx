@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { config } from '@/lib/config'
 import { QUOTE_CTA } from '@/lib/navigation'
+import { btnOutlineSquare, btnPrimarySquare } from '@/lib/ui'
 
 /**
  * Sticky call and quote bar under 1024px, matching the current site. Hidden on
@@ -18,11 +19,11 @@ export default function MobileCallBar() {
       <a
         href={`tel:${config.phone}`}
         aria-label={`Call ${config.displayName} at ${config.phoneDisplay}`}
-        className="flex min-h-[3rem] items-center justify-center gap-2 rounded-site border border-line px-5 font-semibold text-ink"
+        className={`${btnOutlineSquare} min-h-[3rem] px-5`}
       >
         Call
       </a>
-      <Link href={QUOTE_CTA.href} className="flex min-h-[3rem] items-center justify-center rounded-site bg-accent font-semibold text-on-accent">
+      <Link href={QUOTE_CTA.href} className={`${btnPrimarySquare} min-h-[3rem]`}>
         {QUOTE_CTA.label}
       </Link>
     </div>

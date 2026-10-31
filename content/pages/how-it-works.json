@@ -6,20 +6,25 @@
   "lead": null,
   "steps": [
     {
-      "title": null,
-      "body": null
+      "icon": "quote",
+      "title": "Request a Quote",
+      "body": "Call or send the form and tell us about your home. Pricing is based on the linear footage of your roofline and the complexity of the installation."
     },
     {
-      "title": "Custom Design & Quote",
-      "body": null
+      "icon": "design",
+      "title": "Custom Design",
+      "body": "Tailored to your home's unique architecture and colors."
     },
     {
+      "icon": "install",
       "title": "Professional Installation",
-      "body": null
+      "body": "The lighting track is mounted along the eaves of your roofline.",
+      "image": "kalights-install-ladder-dsc07677.jpg"
     },
     {
-      "title": null,
-      "body": null
+      "icon": "app",
+      "title": "Control It From Your Phone",
+      "body": "The lights are app-controlled. Tap a scene and the whole home changes."
     }
   ]
 }

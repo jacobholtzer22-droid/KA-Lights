@@ -53,3 +53,44 @@ export function FeatureIcon({ name, className = 'h-6 w-6' }: IconProps & { name:
       )
   }
 }
+
+export type StepIconName = 'quote' | 'design' | 'install' | 'app'
+
+/** Process step icons (homepage How It Works and /how-it-works). */
+export function StepIcon({ name, className = 'h-6 w-6' }: IconProps & { name: StepIconName }) {
+  switch (name) {
+    case 'quote':
+      return (
+        <svg viewBox="0 0 24 24" className={className} {...base}>
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          <path d="M8 9h8M8 13h5" />
+        </svg>
+      )
+    case 'design':
+      return (
+        <svg viewBox="0 0 24 24" className={className} {...base}>
+          <path d="M3 21l3.5-1 11-11a2.1 2.1 0 0 0-3-3l-11 11z" />
+          <path d="M13.5 6.5l3 3M3 21h18" />
+        </svg>
+      )
+    case 'install':
+      return (
+        <svg viewBox="0 0 24 24" className={className} {...base}>
+          <path d="M3 10l9-7 9 7" />
+          <path d="M5 9v12h14V9" />
+          <path d="M6 12h12" strokeDasharray="1.5 2" />
+        </svg>
+      )
+    case 'app':
+      return (
+        <svg viewBox="0 0 24 24" className={className} {...base}>
+          <rect x="6" y="2" width="12" height="20" rx="2.5" />
+          <path d="M10.5 18.5h3" />
+          <circle cx="10" cy="8" r="1" />
+          <circle cx="14" cy="8" r="1" />
+          <circle cx="10" cy="12" r="1" />
+          <circle cx="14" cy="12" r="1" />
+        </svg>
+      )
+  }
+}

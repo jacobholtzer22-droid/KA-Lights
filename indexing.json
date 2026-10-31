@@ -1,4 +1,4 @@
 {
-  "noindex": true,
-  "_note": "Preview state. Every route is served with X-Robots-Tag noindex, nofollow (vercel.json) and a robots noindex meta tag (app/layout.tsx). Set noindex to false and delete the vercel.json header only at DNS cutover. The launch gate blocks production builds while this is true."
+  "noindex": false,
+  "_note": "Production. Search engines are allowed. Set noindex back to true only to return the site to a private preview; the launch gate blocks production builds while it is true."
 }

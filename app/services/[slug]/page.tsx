@@ -50,8 +50,8 @@ export default async function ServicePage({ params }: { params: { slug: string }
         <article className="lg:col-span-2">{content}</article>
         <aside className="space-y-6">
           {service.image && (
-            <div className="overflow-hidden rounded-card">
-              <Img name={service.image} sizes="(min-width: 1024px) 33vw, 100vw" className="h-auto w-full" />
+            <div className="max-w-sm overflow-hidden rounded-card lg:max-w-none">
+              <Img name={service.image} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 24rem, 100vw" className="h-auto w-full" />
             </div>
           )}
           {(service.priceFrom !== null || service.priceNote) && (

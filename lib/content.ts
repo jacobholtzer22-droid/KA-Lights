@@ -61,6 +61,11 @@ export async function loadContent(
     options: {
       parseFrontmatter: true,
       scope: { config, ...scope },
+      // next-mdx-remote 6 deletes every {expression} by default, which would blank
+      // {service.shortDescription} and {service.priceNote} with no error. The content
+      // is repo-authored, so expressions stay on; eval, Function, process and require
+      // stay blocked (blockDangerousJS defaults to true).
+      blockJS: false,
     },
   })
   return { content, frontmatter: frontmatter ?? {} }

@@ -16,13 +16,13 @@ export default function DifferenceSection() {
             {copy.headingSecondLine && (
               <>
                 <br />
-                <span className="text-accent">{copy.headingSecondLine}</span>
+                <span className="text-accent-ink">{copy.headingSecondLine}</span>
               </>
             )}
           </h2>
         )}
         {copy.paragraphs.map((p) => (
-          <p key={p} className="mt-4 text-step-1 text-ink-soft">
+          <p key={p} className="mt-4 max-w-measure text-step-1 text-ink-soft">
             {p}
           </p>
         ))}

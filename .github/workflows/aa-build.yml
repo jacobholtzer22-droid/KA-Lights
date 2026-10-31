@@ -13,7 +13,9 @@ name: AA build
 #
 # The gate runs as its own step with continue-on-error, because a red gate must
 # still produce a branch, a PR and a report. A failed build that reports why is
-# reviewable; a failed build that vanishes is not.
+# reviewable; a failed build that vanishes is not. The job may stay green, but
+# the callback sends status "failure" for a red gate or a missing
+# BUILD-REPORT.md, with the agent's last words and the end of the gate output.
 #
 # aa-payload-files: url
 # The platform reads that line to know this workflow fetches `assets` and
@@ -207,6 +209,55 @@ jobs:
           git config user.name  "$BUILD_AUTHOR_NAME"
           git config user.email "$BUILD_AUTHOR_EMAIL"
 
+      # ---------------------------------------------------------------------
+      # Where a site_update starts. Normally main. But a site's first build
+      # waits on its PR until Jacob merges it, and until then site.config.ts on
+      # main is still the template sample: an update based on main would have
+      # no site to update. So when main's config does not carry this client's
+      # businessSlug, the update bases on the newest open build/<slug> PR
+      # branch, with main merged in so the new PR stays mergeable. That PR (to
+      # main) carries the first build too and supersedes its PR. No open build
+      # PR either: refused here, before the agent runs.
+      # ---------------------------------------------------------------------
+      - name: Base for the update
+        id: base
+        if: steps.cfg.outputs.kind == 'site_update'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLUG: ${{ steps.cfg.outputs.business_slug }}
+        run: |
+          set -euo pipefail
+          if grep -Eq "businessSlug:[[:space:]]*['\"]${SLUG}['\"]" site.config.ts; then
+            echo "ref=main" >> "$GITHUB_OUTPUT"
+            echo "main carries ${SLUG}; the update bases on main."
+            exit 0
+          fi
+          head="$(gh pr list --state open --base main --limit 50 --json headRefName,createdAt \
+            --jq '[.[] | select(.headRefName | test("^build/" + $ENV.SLUG + "(-[a-z0-9]{1,12})?$"))] | sort_by(.createdAt) | last | .headRefName // empty')"
+          if [ -z "$head" ]; then
+            msg="site_update refused: site.config.ts on main is still the template sample (no businessSlug '${SLUG}') and there is no open build/${SLUG} PR to update. Run site_build, or merge the first build's PR, then dispatch the update again."
+            printf '%s' "$msg" > "$RUNNER_TEMP/refused.txt"
+            echo "::error::$msg"
+            exit 1
+          fi
+          git checkout -q -B "$head" "origin/$head"
+          if git merge --no-edit -q origin/main; then
+            echo "Merged main into $head."
+          else
+            git merge --abort
+            echo "::warning::main does not merge cleanly into $head; the update runs on $head as it is."
+          fi
+          echo "ref=$head" >> "$GITHUB_OUTPUT"
+          echo "start=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "main is still the template sample; the update bases on the open build PR branch $head."
+
+      - name: Clear stale reports
+        # A report left on the branch by an earlier run must never be read as
+        # this run's: the PR body, the callback excerpt and the success test
+        # all read BUILD-REPORT.md. After this, a BUILD-REPORT.md in the tree
+        # was written by this run's agent.
+        run: rm -f BUILD-REPORT.md CLIENT-TODO.md
+
       - name: Install dependencies
         # tsx, cheerio and sharp are devDependencies and the gate needs all
         # three, so this is a full install. Never --omit=dev here.
@@ -238,7 +289,7 @@ jobs:
           const missing = [blank(c.phone) ? 'phone' : null, blank(c.email) ? 'email' : null].filter(Boolean) as string[]
           if (missing.length) {
             const msg = `go_live refused: ${missing.join(' and ')} ${missing.length > 1 ? 'are' : 'is'} null in site.config.ts. A site never goes live without a public phone and email. Add ${missing.length > 1 ? 'them' : 'it'} with a site_update run, then dispatch go_live again.`
-            writeFileSync(path.join(process.env.RUNNER_TEMP ?? '.', 'golive-refused.txt'), msg)
+            writeFileSync(path.join(process.env.RUNNER_TEMP ?? '.', 'refused.txt'), msg)
             console.log(`::error::${msg}`)
             process.exit(1)
           }
@@ -357,6 +408,12 @@ jobs:
       # OLD-SITE.json says whether to copy the old site. Both are inputs the
       # agent reads and never edits (AGENT.md, Non-interactive (CI) mode).
       # Once one real photo is in, the template's sample-* placeholders go.
+      # Videos (kind video, up to 300 MB) are downloaded to the runner's temp
+      # folder, never the repo, and transcoded by scripts/transcode-videos.mjs
+      # with ffmpeg: a 15 s, 8 MB silent hero clip, a 60 s, 25 MB gallery clip
+      # with audio, and a poster from the chosen frame, all in public/videos/
+      # with public/videos/manifest.json. Anything that cannot be transcoded
+      # is skipped and listed in ASSETS.json, never half-written.
       # ---------------------------------------------------------------------
       - name: Fetch client files
         if: steps.cfg.outputs.kind != 'go_live'
@@ -391,7 +448,14 @@ jobs:
           payload_file "$RUNNER_TEMP/assets-in.json" "$ASSETS" assets
           jq -e 'type == "array"' "$RUNNER_TEMP/assets-in.json" > /dev/null || { echo "::error::the asset list is not a JSON array"; exit 1; }
           echo "Asset list: $(jq length "$RUNNER_TEMP/assets-in.json") file(s)."
-          node - "$RUNNER_TEMP/assets-in.json" <<'NODE'
+          if jq -e 'any(.[]; .kind == "video")' "$RUNNER_TEMP/assets-in.json" >/dev/null; then
+            if ! command -v ffmpeg >/dev/null; then
+              echo "Installing ffmpeg for the client videos."
+              sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
+            fi
+            ffmpeg -hide_banner -version | head -1
+          fi
+          node - "$RUNNER_TEMP/assets-in.json" "$RUNNER_TEMP" <<'NODE'
           const fs = require('node:fs')
           const path = require('node:path')
           const { execFileSync } = require('node:child_process')
@@ -402,11 +466,29 @@ jobs:
           const used = new Set()
           const saved = []
           const skipped = []
+          const videos = []
+          const videoDir = path.join(process.argv[3], 'videos')
           for (const a of list) {
             let host = ''
             try { host = new URL(a.url).hostname } catch {}
             if (!host.endsWith('.public.blob.vercel-storage.com')) { skipped.push({ ...a, why: 'not a Vercel Blob URL' }); continue }
             if (a.kind === 'document') { skipped.push({ ...a, why: 'documents are not placed on the site' }); continue }
+            if (a.kind === 'video') {
+              // Downloaded outside the repo; only the transcoded files land in public/videos/.
+              fs.mkdirSync(videoDir, { recursive: true })
+              const vext = (path.extname(new URL(a.url).pathname) || '.mp4').toLowerCase()
+              let vbase = kebab(a.caption) || kebab(a.filename) || 'video'
+              for (let n = 2; used.has(vbase + '.mp4'); n++) vbase = `${kebab(a.caption) || kebab(a.filename) || 'video'}-${n}`
+              used.add(vbase + '.mp4')
+              const input = path.join(videoDir, vbase + vext)
+              try {
+                execFileSync('curl', ['-fsSL', '--max-filesize', String(300 * 1024 * 1024), '-o', input, a.url], { stdio: 'inherit' })
+                videos.push({ input, name: vbase, caption: a.caption, happens: a.happens ?? null, service: a.service, beforeAfter: a.beforeAfter ?? null, heroVideo: Boolean(a.heroVideo), posterTime: a.posterTime ?? null, source: a.filename })
+              } catch (e) {
+                skipped.push({ ...a, why: e.status === 63 ? 'larger than 300 MB' : 'download failed' })
+              }
+              continue
+            }
             const ext = (path.extname(new URL(a.url).pathname) || '.jpg').toLowerCase()
             // Google Business Profile photos are named gbp-* so the image manifest marks their source.
             let base = (a.kind === 'logo' ? 'logo' : '') || (a.kind === 'gbp' ? `gbp-${kebab(a.caption) || kebab(a.filename) || 'photo'}` : '') || kebab(a.caption) || kebab(a.filename) || 'photo'
@@ -421,9 +503,25 @@ jobs:
               skipped.push({ ...a, why: 'download failed' })
             }
           }
+          if (videos.length && !fs.existsSync('scripts/transcode-videos.mjs')) {
+            for (const v of videos) skipped.push({ kind: 'video', filename: v.source, caption: v.caption, why: 'this repo has no scripts/transcode-videos.mjs yet (template sync pending)' })
+            videos.length = 0
+          }
+          if (videos.length) {
+            const listFile = path.join(process.argv[3], 'videos.json')
+            const reportFile = path.join(process.argv[3], 'videos-report.json')
+            fs.writeFileSync(listFile, JSON.stringify(videos))
+            execFileSync('node', ['scripts/transcode-videos.mjs', listFile, reportFile], { stdio: 'inherit' })
+            const report = JSON.parse(fs.readFileSync(reportFile, 'utf8'))
+            for (const v of report.saved) {
+              saved.push({ kind: 'video', key: v.key, file: v.gallery.src.replace(/^\//, 'public/'), hero: v.hero, gallery: v.gallery, poster: v.poster, caption: v.caption, happens: v.happens, service: v.service, beforeAfter: v.beforeAfter, heroVideo: v.heroVideo, trimmed: v.trimmed, source: v.source })
+            }
+            for (const v of report.skipped) skipped.push({ kind: 'video', filename: v.source, caption: v.caption, why: v.why })
+          }
           fs.writeFileSync('ASSETS.json', JSON.stringify({ saved, skipped }, null, 2) + '\n')
           const photos = saved.filter((s) => s.kind === 'photo').length
-          console.log(`Saved ${saved.length} file(s) (${photos} photo(s)), skipped ${skipped.length}.`)
+          const vids = saved.filter((s) => s.kind === 'video').length
+          console.log(`Saved ${saved.length} file(s) (${photos} photo(s), ${vids} video(s)), skipped ${skipped.length}.`)
           if (photos > 0) {
             for (const f of fs.readdirSync(dir)) if (f.startsWith('sample-')) fs.rmSync(path.join(dir, f))
             console.log('Removed the sample-* placeholders from originals.')
@@ -601,10 +699,14 @@ jobs:
           # AGENT.md has the agent run npm run build / verify and commit to the
           # build branch, so it needs Bash. Pushing is the workflow's job (the
           # push step below); an agent push would race it, so it is denied.
+          # Subagents are denied too (Task, and Agent, its newer name): the run
+          # ends when the main agent's turn ends, and a subagent still working
+          # then is lost with whatever it was doing (AA-OneUnitedConstruction
+          # run 6 ended on "I'll continue once they report back").
           claude_args: |
             --max-turns 180
             --allowedTools "Bash,Read,Write,Edit,MultiEdit,Glob,Grep,LS,TodoWrite"
-            --disallowedTools "Bash(git push:*)"
+            --disallowedTools "Bash(git push:*)" "Task" "Agent"
 
       - name: Verify gate
         id: verify
@@ -638,6 +740,12 @@ jobs:
           failing=""
           if [ -f "$out" ]; then
             failing="$(grep -oE '^FAILED: .*' "$out" | head -1 | sed 's/^FAILED: //; s/\. Do not deploy\.$//' || true)"
+            # No summary line on a red gate: `next build` died before the
+            # checks ran. The tail below says on what.
+            if [ -z "$failing" ] && [ "${{ steps.verify.outcome }}" != "success" ]; then failing="next build"; fi
+            # The end of the gate's output, for the callback: a build error is
+            # only readable there.
+            tail -40 "$out" | tail -c 4000 > "$RUNNER_TEMP/verify-tail.txt" || true
           fi
           echo "failing_checks=${failing}" >> "$GITHUB_OUTPUT"
           echo "Gate: ${{ steps.verify.outcome }}. Failing: ${failing:-none}"
@@ -653,9 +761,10 @@ jobs:
       - name: Commit and push the build branch
         id: push
         # Not after a refused go_live: nothing ran, so there is nothing to push.
-        if: always() && steps.golive_contact.outcome != 'failure'
+        if: always() && steps.golive_contact.outcome != 'failure' && steps.base.outcome != 'failure'
         env:
           BRANCH: ${{ steps.cfg.outputs.branch }}
+          BASE_START: ${{ steps.base.outputs.start }}
         run: |
           set -euo pipefail
           git config user.name  "$BUILD_AUTHOR_NAME"
@@ -691,9 +800,12 @@ jobs:
             echo "Added an empty commit authored by $BUILD_AUTHOR_NAME at the branch head."
           fi
 
-          if git rev-parse --verify --quiet "origin/main" >/dev/null && \
-             [ "$(git rev-list --count origin/main.."$BRANCH")" = "0" ]; then
-            echo "::warning::No commits on $BRANCH beyond main. Claude Code produced no changes."
+          # Against where the run started: main, or the build branch an update
+          # was based on (see "Base for the update").
+          since="${BASE_START:-origin/main}"
+          if git rev-parse --verify --quiet "$since" >/dev/null && \
+             [ "$(git rev-list --count "$since".."$BRANCH")" = "0" ]; then
+            echo "::warning::No commits on $BRANCH beyond its base. Claude Code produced no changes."
             echo "empty=true" >> "$GITHUB_OUTPUT"
           else
             echo "empty=false" >> "$GITHUB_OUTPUT"
@@ -718,6 +830,7 @@ jobs:
           BRANCH: ${{ steps.push.outputs.branch }}
           KIND: ${{ steps.cfg.outputs.kind }}
           SLUG: ${{ steps.cfg.outputs.business_slug }}
+          BASE_REF: ${{ steps.base.outputs.ref }}
         run: |
           set -euo pipefail
 
@@ -745,6 +858,10 @@ jobs:
             cat "$RUNNER_TEMP/verify-table.txt" 2>/dev/null || echo "(no verify output captured)"
             echo '```'
             echo
+            if [ -n "${BASE_REF:-}" ] && [ "$BASE_REF" != "main" ]; then
+              echo "Based on \`$BASE_REF\`, the first build, which is not merged yet. Merging this PR merges that build too; close its PR."
+              echo
+            fi
             echo "Ops run \`${{ steps.cfg.outputs.run_id }}\` · workflow run [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
           } > "$RUNNER_TEMP/pr-body.md"
 
@@ -782,7 +899,7 @@ jobs:
           KIND: ${{ steps.cfg.outputs.kind }}
           # What git pushed (the push step), falling back to the planned name only if the push never ran.
           # Empty after a refused go_live: nothing was pushed, so there is no branch to preview.
-          BRANCH: ${{ steps.push.outputs.branch || (steps.golive_contact.outcome != 'failure' && steps.cfg.outputs.branch) || '' }}
+          BRANCH: ${{ steps.push.outputs.branch || (steps.golive_contact.outcome != 'failure' && steps.base.outcome != 'failure' && steps.cfg.outputs.branch) || '' }}
           PR_URL: ${{ steps.pr.outputs.pr_url }}
           VERIFY_PASSED: ${{ steps.gate.outputs.verify_passed }}
           FAILING_CHECKS: ${{ steps.gate.outputs.failing_checks }}
@@ -798,11 +915,31 @@ jobs:
             exit 0
           fi
 
+          # "Clear stale reports" removed any earlier report, so a
+          # BUILD-REPORT.md here is this run's.
           excerpt=""
+          report_missing=false
           if [ -f BUILD-REPORT.md ]; then
             excerpt="$(head -60 BUILD-REPORT.md)"
           else
             excerpt="(no BUILD-REPORT.md was produced)"
+            report_missing=true
+          fi
+
+          # The job can be green while the run failed: the gate and the PR are
+          # continue-on-error so a red build still reports. The platform reads
+          # status, so a missing report (the agent ended before Phase 7) or a
+          # red gate is sent as failure. branch and pr_url are sent either way.
+          status="$JOB_STATUS"
+          if [ "$status" = "success" ] && { [ "$report_missing" = true ] || [ "${VERIFY_PASSED:-false}" != "true" ]; }; then
+            status="failure"
+          fi
+
+          # The end of the gate's output, on a red gate: next build's error is
+          # only readable there.
+          verify_tail=""
+          if [ "${VERIFY_PASSED:-false}" != "true" ] && [ -s "$RUNNER_TEMP/verify-tail.txt" ]; then
+            verify_tail="$(cat "$RUNNER_TEMP/verify-tail.txt")"
           fi
 
           # On a failed run, the last 20 lines of the agent's final result, so
@@ -811,11 +948,11 @@ jobs:
           # message per line. A run that stopped without result text (max
           # turns, say) reports its subtype instead.
           failure_tail=""
-          if [ -s "$RUNNER_TEMP/golive-refused.txt" ]; then
-            # A refused go_live never reached the agent; its reason is the failure.
-            failure_tail="$(cat "$RUNNER_TEMP/golive-refused.txt")"
+          if [ -s "$RUNNER_TEMP/refused.txt" ]; then
+            # A refused go_live or site_update never reached the agent; its reason is the failure.
+            failure_tail="$(cat "$RUNNER_TEMP/refused.txt")"
             excerpt="$failure_tail"
-          elif [ "$JOB_STATUS" != "success" ] || [ "${CLAUDE_OUTCOME:-}" = "failure" ]; then
+          elif [ "$status" != "success" ] || [ "${CLAUDE_OUTCOME:-}" = "failure" ]; then
             out="${CLAUDE_OUTPUT:-$RUNNER_TEMP/claude-execution-output.json}"
             [ -f "$out" ] || out="$RUNNER_TEMP/claude-execution-output.json"
             if [ -f "$out" ]; then
@@ -825,6 +962,9 @@ jobs:
                   elif ((.result // "") | length) > 0 then .result
                   else "Claude stopped without a result (\(.subtype // "unknown"))" end
               ' "$out" 2>/dev/null | tail -20 | head -c 4000 || true)"
+            fi
+            if [ "$report_missing" = true ]; then
+              failure_tail="$(printf 'No BUILD-REPORT.md: the agent ended before Phase 7 wrote its report.\n%s' "$failure_tail" | head -c 4000)"
             fi
           fi
 
@@ -861,13 +1001,14 @@ jobs:
           jq -nc \
             --arg run_id        "$RUN_ID" \
             --arg kind          "$KIND" \
-            --arg status        "$JOB_STATUS" \
+            --arg status        "$status" \
             --arg branch        "$BRANCH" \
             --arg pr_url        "${PR_URL:-}" \
             --arg run_url       "$RUN_URL" \
             --arg failing       "${FAILING_CHECKS:-}" \
             --arg excerpt       "$excerpt" \
             --arg failure_tail  "$failure_tail" \
+            --arg verify_tail   "$verify_tail" \
             --arg client_todo   "$client_todo" \
             --arg design_direction "$design_direction" \
             --argjson verify_passed "${VERIFY_PASSED:-false}" \
@@ -882,6 +1023,7 @@ jobs:
                failing_checks: (if $failing == "" then [] else ($failing | split(", ")) end),
                report_excerpt: $excerpt,
                failure_tail: (if $failure_tail == "" then null else $failure_tail end),
+               verify_tail: (if $verify_tail == "" then null else $verify_tail end),
                client_todo: (if $client_todo == "" then null else $client_todo end),
                design_direction: (if $design_direction == "" then null else $design_direction end)
              }' > "$RUNNER_TEMP/callback.json"

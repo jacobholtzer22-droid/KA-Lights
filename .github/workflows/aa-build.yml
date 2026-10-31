@@ -14,6 +14,14 @@ name: AA build
 # The gate runs as its own step with continue-on-error, because a red gate must
 # still produce a branch, a PR and a report. A failed build that reports why is
 # reviewable; a failed build that vanishes is not.
+#
+# aa-payload-files: url
+# The platform reads that line to know this workflow fetches `assets` and
+# `extras` by URL. client_payload is capped at about 64 KB, so the asset list,
+# the GBP lookup and the extras are written to public Vercel Blob
+# (ops-dispatch/{runId}/assets.json, gbp.json, extras.json) and the payload
+# carries their URLs. A value that is not an https:// URL is read as base64,
+# as before, so an older platform still works.
 
 on:
   repository_dispatch:
@@ -53,7 +61,7 @@ on:
         required: false
         default: ''
       assets:
-        description: 'base64 of a JSON list of client files [{url, kind, filename, caption, heroCandidate, service, beforeAfter}] (site_build, site_update)'
+        description: 'URL of (or base64 of) a JSON list of client files [{url, kind, filename, caption, heroCandidate, service, beforeAfter}] (site_build, site_update)'
         type: string
         required: false
         default: ''
@@ -242,13 +250,29 @@ jobs:
         env:
           BRIEF_B64: ${{ github.event.inputs.brief || github.event.client_payload.brief }}
           INSTRUCTIONS_B64: ${{ github.event.inputs.instructions || github.event.client_payload.instructions }}
-          # One base64 JSON object, so client_payload stays under GitHub's 10 keys:
+          # One JSON object, so client_payload stays under GitHub's 10 keys, sent
+          # as the URL of extras.json (or base64 from an older platform):
           # { recent_styles?: [{ client, direction, pairing, headingAccent }],
-          #   gbp?: <Places result>, style?: { sitesLiked?, brandColors? } }
-          EXTRAS_B64: ${{ github.event.inputs.extras || github.event.client_payload.extras }}
+          #   gbp_url?: <URL of gbp.json>, gbp?: <Places result, inline form>,
+          #   style?: { sitesLiked?, brandColors? } }
+          EXTRAS: ${{ github.event.inputs.extras || github.event.client_payload.extras }}
           KIND: ${{ steps.cfg.outputs.kind }}
         run: |
           set -euo pipefail
+          # A payload file: a public Vercel Blob URL to download, or base64 to decode.
+          payload_file() {
+            case "$2" in
+              https://*)
+                local host="${2#https://}"; host="${host%%/*}"
+                case "$host" in
+                  *.public.blob.vercel-storage.com) ;;
+                  *) echo "::error::$3 URL is not a public Vercel Blob URL: $2"; exit 1 ;;
+                esac
+                curl -fsSL --retry 3 --max-filesize $((5 * 1024 * 1024)) -o "$1" "$2" || { echo "::error::could not download $3 from $2"; exit 1; }
+                echo "Fetched $3 by URL ($(wc -c < "$1") bytes)." ;;
+              *) printf '%s' "$2" | base64 -d > "$1" ;;
+            esac
+          }
           case "$KIND" in
             site_build)
               printf '%s' "$BRIEF_B64" | base64 -d > BRIEF.md
@@ -293,12 +317,16 @@ jobs:
 
           # Extras from the platform. The workflow writes them; the agent reads
           # GBP.json and BRIEF.md and never edits either.
-          if [ "$KIND" != "go_live" ] && [ -n "${EXTRAS_B64:-}" ]; then
-            printf '%s' "$EXTRAS_B64" | base64 -d > "$RUNNER_TEMP/extras.json"
+          if [ "$KIND" != "go_live" ] && [ -n "${EXTRAS:-}" ]; then
+            payload_file "$RUNNER_TEMP/extras.json" "$EXTRAS" extras
             if ! jq -e 'type == "object"' "$RUNNER_TEMP/extras.json" > /dev/null 2>&1; then
               echo "::warning::extras is not a JSON object; ignored."
             else
-              if jq -e '.gbp | type == "object"' "$RUNNER_TEMP/extras.json" > /dev/null; then
+              if jq -e '.gbp_url | type == "string"' "$RUNNER_TEMP/extras.json" > /dev/null; then
+                payload_file GBP.json "$(jq -r '.gbp_url' "$RUNNER_TEMP/extras.json")" GBP.json
+                jq -e 'type == "object"' GBP.json > /dev/null || { echo "::error::GBP.json is not a JSON object"; exit 1; }
+                echo "Wrote GBP.json ($(wc -c < GBP.json) bytes)."
+              elif jq -e '.gbp | type == "object"' "$RUNNER_TEMP/extras.json" > /dev/null; then
                 jq '.gbp' "$RUNNER_TEMP/extras.json" > GBP.json
                 echo "Wrote GBP.json ($(wc -c < GBP.json) bytes)."
               fi
@@ -333,19 +361,36 @@ jobs:
       - name: Fetch client files
         if: steps.cfg.outputs.kind != 'go_live'
         env:
-          ASSETS_B64: ${{ github.event.inputs.assets || github.event.client_payload.assets }}
+          # The URL of assets.json, or base64 of the list (an older platform, or by hand).
+          ASSETS: ${{ github.event.inputs.assets || github.event.client_payload.assets }}
           OLD_SITE_B64: ${{ github.event.inputs.old_site || github.event.client_payload.old_site }}
         run: |
           set -euo pipefail
+          # A payload file: a public Vercel Blob URL to download, or base64 to decode.
+          payload_file() {
+            case "$2" in
+              https://*)
+                local host="${2#https://}"; host="${host%%/*}"
+                case "$host" in
+                  *.public.blob.vercel-storage.com) ;;
+                  *) echo "::error::$3 URL is not a public Vercel Blob URL: $2"; exit 1 ;;
+                esac
+                curl -fsSL --retry 3 --max-filesize $((5 * 1024 * 1024)) -o "$1" "$2" || { echo "::error::could not download $3 from $2"; exit 1; }
+                echo "Fetched $3 by URL ($(wc -c < "$1") bytes)." ;;
+              *) printf '%s' "$2" | base64 -d > "$1" ;;
+            esac
+          }
           if [ -n "${OLD_SITE_B64:-}" ]; then
             printf '%s' "$OLD_SITE_B64" | base64 -d > OLD-SITE.json
             echo "Wrote OLD-SITE.json: $(cat OLD-SITE.json)"
           fi
-          if [ -z "${ASSETS_B64:-}" ]; then
+          if [ -z "${ASSETS:-}" ]; then
             echo "No client files in the payload."
             exit 0
           fi
-          printf '%s' "$ASSETS_B64" | base64 -d > "$RUNNER_TEMP/assets-in.json"
+          payload_file "$RUNNER_TEMP/assets-in.json" "$ASSETS" assets
+          jq -e 'type == "array"' "$RUNNER_TEMP/assets-in.json" > /dev/null || { echo "::error::the asset list is not a JSON array"; exit 1; }
+          echo "Asset list: $(jq length "$RUNNER_TEMP/assets-in.json") file(s)."
           node - "$RUNNER_TEMP/assets-in.json" <<'NODE'
           const fs = require('node:fs')
           const path = require('node:path')

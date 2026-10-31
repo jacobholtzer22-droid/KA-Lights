@@ -92,11 +92,12 @@ const siteConfig = {
     },
   ],
 
-  // Every image below is a labeled placeholder under launch blocker B1 (real photography of a real install).
+  // Hero and gallery are the client's own install photos (intake 4484.jpg, 4485.jpg).
+  // Crew images are still labeled placeholders under launch blocker B1.
   images: {
-    hero: 'placeholder-hero.jpg',
+    hero: 'backyard-patio-at-dusk-with-string-lights-strung-overhead-an.jpg',
     about: null,
-    gallery: ['placeholder-gallery-1.jpg', 'placeholder-gallery-2.jpg', 'placeholder-gallery-3.jpg', 'placeholder-gallery-4.jpg'],
+    gallery: ['covered-patio-at-dusk-with-lights-installed-along-the-cover-.jpg'],
     crew: ['placeholder-crew-1.jpg', 'placeholder-crew-2.jpg', 'placeholder-crew-3.jpg'],
   },
 

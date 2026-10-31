@@ -303,13 +303,16 @@ const siteConfig = {
     },
   ],
 
-  // Hero and gallery are AI design renderings, registered in placeholders.json as
-  // "Rendering (AI, labeled)". Every one renders with a visible "Design rendering"
-  // label (verify check 23). Crew photos are real (supplied by Will).
+  // The hero and the first gallery image are the client's own install photos
+  // (intake 4484.jpg, 4485.jpg; PR #1). The rest of the gallery is AI design
+  // renderings, registered in placeholders.json as "Rendering (AI, labeled)"; each
+  // renders with a visible "Design rendering" label (verify check 23). Crew photos
+  // are real (supplied by Will).
   images: {
-    hero: 'rendering-two-story-holiday-roofline.jpg',
+    hero: 'backyard-patio-at-dusk-with-string-lights-strung-overhead-an.jpg',
     about: null,
     gallery: [
+      'covered-patio-at-dusk-with-lights-installed-along-the-cover-.jpg',
       'rendering-spanish-style-multicolor.jpg',
       'rendering-two-story-rainbow.jpg',
       'rendering-backyard-pool-holiday.jpg',

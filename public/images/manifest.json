@@ -1,4 +1,24 @@
 {
+  "backyard-patio-at-dusk-with-string-lights-strung-overhead-an.jpg": {
+    "width": 1536,
+    "height": 2048,
+    "alt": "Backyard patio at dusk with string lights strung overhead and lit eave lights along the roofline and patio cover",
+    "base": "backyard-patio-at-dusk-with-string-lights-strung-overhead-an",
+    "sizes": [
+      640,
+      1024
+    ]
+  },
+  "covered-patio-at-dusk-with-lights-installed-along-the-cover-.jpg": {
+    "width": 1536,
+    "height": 2048,
+    "alt": "Covered patio at dusk with lights installed along the cover edge, ceiling light over the seating area and landscape uplights by the wall",
+    "base": "covered-patio-at-dusk-with-lights-installed-along-the-cover",
+    "sizes": [
+      640,
+      1024
+    ]
+  },
   "kalights-crew-group-dsc07608.jpg": {
     "width": 2400,
     "height": 1600,

@@ -1,0 +1,23 @@
+{
+  "saved": [
+    {
+      "file": "public/images/originals/backyard-patio-at-dusk-with-string-lights-strung-overhead-an.jpg",
+      "kind": "photo",
+      "caption": "Backyard patio at dusk with string lights strung overhead and lit eave lights along the roofline and patio cover",
+      "heroCandidate": true,
+      "service": null,
+      "beforeAfter": null,
+      "source": "4484.jpg"
+    },
+    {
+      "file": "public/images/originals/covered-patio-at-dusk-with-lights-installed-along-the-cover-.jpg",
+      "kind": "photo",
+      "caption": "Covered patio at dusk with lights installed along the cover edge, ceiling light over the seating area and landscape uplights by the wall",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "4485.jpg"
+    }
+  ],
+  "skipped": []
+}

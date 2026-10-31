@@ -1,4 +1,24 @@
 {
+  "backyard-patio-at-dusk-with-string-lights-strung-overhead-an.jpg": {
+    "width": 1536,
+    "height": 2048,
+    "alt": "Backyard patio at dusk with string lights strung overhead and lit eave lights along the roofline and patio cover",
+    "base": "backyard-patio-at-dusk-with-string-lights-strung-overhead-an",
+    "sizes": [
+      640,
+      1024
+    ]
+  },
+  "covered-patio-at-dusk-with-lights-installed-along-the-cover-.jpg": {
+    "width": 1536,
+    "height": 2048,
+    "alt": "Covered patio at dusk with lights installed along the cover edge, ceiling light over the seating area and landscape uplights by the wall",
+    "base": "covered-patio-at-dusk-with-lights-installed-along-the-cover",
+    "sizes": [
+      640,
+      1024
+    ]
+  },
   "placeholder-crew-1.jpg": {
     "width": 1500,
     "height": 1000,
@@ -27,57 +47,6 @@
     "sizes": [
       640,
       1024
-    ]
-  },
-  "placeholder-gallery-1.jpg": {
-    "width": 1600,
-    "height": 900,
-    "alt": "Photo pending placeholder graphic for gallery photo 1, not a photograph of an installation",
-    "base": "placeholder-gallery-1",
-    "sizes": [
-      640,
-      1024
-    ]
-  },
-  "placeholder-gallery-2.jpg": {
-    "width": 1600,
-    "height": 900,
-    "alt": "Photo pending placeholder graphic for gallery photo 2, not a photograph of an installation",
-    "base": "placeholder-gallery-2",
-    "sizes": [
-      640,
-      1024
-    ]
-  },
-  "placeholder-gallery-3.jpg": {
-    "width": 1600,
-    "height": 900,
-    "alt": "Photo pending placeholder graphic for gallery photo 3, not a photograph of an installation",
-    "base": "placeholder-gallery-3",
-    "sizes": [
-      640,
-      1024
-    ]
-  },
-  "placeholder-gallery-4.jpg": {
-    "width": 1600,
-    "height": 900,
-    "alt": "Photo pending placeholder graphic for gallery photo 4, not a photograph of an installation",
-    "base": "placeholder-gallery-4",
-    "sizes": [
-      640,
-      1024
-    ]
-  },
-  "placeholder-hero.jpg": {
-    "width": 1920,
-    "height": 1080,
-    "alt": "Photo pending placeholder graphic for the homepage hero, not a photograph of an installation",
-    "base": "placeholder-hero",
-    "sizes": [
-      640,
-      1024,
-      1920
     ]
   },
   "placeholder-scene-christmas.jpg": {

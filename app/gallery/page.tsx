@@ -22,8 +22,8 @@ export default function GalleryPage() {
     <>
       <JsonLd data={breadcrumbList(CRUMBS)} />
       <PageHeader display={galleryCopy.display} highlightClass="text-spectrum" title={pageH1.gallery()} intro={pageIntro()} lead={galleryCopy.lead} />
-      {/* Night renderings end to end, so the grid keeps the dark palette (decision 44). */}
-      <section aria-label="Design renderings" style={darkVars} className="relative bg-bg text-ink-soft">
+      {/* Night install photos lead the grid, so it keeps the dark palette (decision 44). */}
+      <section aria-label="Install photos" style={darkVars} className="relative bg-bg text-ink-soft">
         <div aria-hidden="true" className="strip-spectrum absolute inset-x-0 top-0" />
         <div className="mx-auto max-w-page px-4 py-16 md:py-24 lg:px-8">
           <GalleryGrid />

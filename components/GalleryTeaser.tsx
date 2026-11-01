@@ -5,8 +5,8 @@ import GalleryGrid from './GalleryGrid'
 import Section, { type SectionTone } from './Section'
 
 /**
- * Design Ideas teaser. The band keeps the dark palette (decision 44): every
- * image in it is a night rendering, and a light ground between pure-night
+ * Design Ideas teaser. The band keeps the dark palette (decision 44): the
+ * first images in it are night install photos, and a light ground between pure-night
  * frames reads as unfinished. The page returns to light at the next section.
  */
 export default function GalleryTeaser({ tone = 'base' }: { tone?: SectionTone } = {}) {

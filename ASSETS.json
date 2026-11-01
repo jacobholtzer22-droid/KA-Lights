@@ -17,7 +17,674 @@
       "service": null,
       "beforeAfter": null,
       "source": "4485.jpg"
+    },
+    {
+      "file": "public/images/originals/close-view-of-warm-white-lights-running-along-tile-roof-edge.jpeg",
+      "kind": "photo",
+      "caption": "Close view of warm white lights running along tile roof edges and gables above a garage at night.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "after",
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM (10).jpeg"
+    },
+    {
+      "file": "public/images/originals/house-at-night-with-blue-and-white-roofline-lights-outlining.jpeg",
+      "kind": "photo",
+      "caption": "House at night with blue and white roofline lights outlining the gables.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "after",
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM (12).jpeg"
+    },
+    {
+      "file": "public/images/originals/same-house-at-night-with-multicolor-roofline-lights-in-red-g.jpeg",
+      "kind": "photo",
+      "caption": "Same house at night with multicolor roofline lights in red, green and white along the gables and porch.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "after",
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM.jpeg"
+    },
+    {
+      "file": "public/images/originals/house-at-night-with-warm-white-lights-outlining-the-roof-gab.jpeg",
+      "kind": "photo",
+      "caption": "House at night with warm white lights outlining the roof gables and porch, a white SUV parked in the driveway.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "after",
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM (9).jpeg"
+    },
+    {
+      "file": "public/images/originals/close-up-at-night-of-warm-white-lights-glowing-in-a-track-un.jpeg",
+      "kind": "photo",
+      "caption": "Close-up at night of warm white lights glowing in a track under the eave of a stucco house.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "after",
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM (11).jpeg"
+    },
+    {
+      "file": "public/images/originals/single-story-house-at-night-with-red-green-and-white-lights-.jpeg",
+      "kind": "photo",
+      "caption": "Single-story house at night with red, green and white lights outlining the roofline gables, plus Halloween dinosaur decorations out front.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM (8).jpeg"
+    },
+    {
+      "file": "public/images/originals/installer-in-black-stands-on-a-ladder-reaching-up-to-mount-a.jpeg",
+      "kind": "photo",
+      "caption": "Installer in black stands on a ladder reaching up to mount a light track under the eave of a stucco.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.34 AM (4).jpeg"
+    },
+    {
+      "file": "public/images/originals/installer-on-a-stepladder-fastens-a-light-track-along-the-ea.jpeg",
+      "kind": "photo",
+      "caption": "Installer on a stepladder fastens a light track along the eave of a stucco house against a clear blue sky.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM (16).jpeg"
+    },
+    {
+      "file": "public/images/originals/installer-wearing-safety-glasses-stands-on-a-ladder-indoors-.jpeg",
+      "kind": "photo",
+      "caption": "Installer wearing safety glasses stands on a ladder indoors holding a black cable against a white wall.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.34 AM (6).jpeg"
+    },
+    {
+      "file": "public/images/originals/two-installers-sit-on-a-tile-roof-fastening-light-track-unde.jpeg",
+      "kind": "photo",
+      "caption": "Two installers sit on a tile roof fastening light track under the gable edge of a house.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM (14).jpeg"
+    },
+    {
+      "file": "public/images/originals/installer-on-a-ladder-works-under-the-eave-in-a-narrow-side-.jpeg",
+      "kind": "photo",
+      "caption": "Installer on a ladder works under the eave in a narrow side yard between a stucco wall and a block.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.34 AM (2).jpeg"
+    },
+    {
+      "file": "public/images/originals/two-installers-sit-on-a-tile-roof-beside-a-dormer-mounting-a.jpeg",
+      "kind": "photo",
+      "caption": "Two installers sit on a tile roof beside a dormer, mounting a light track along the eave.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM (15).jpeg"
+    },
+    {
+      "file": "public/images/originals/installer-on-a-stepladder-fastens-a-light-track-under-the-ro.jpeg",
+      "kind": "photo",
+      "caption": "Installer on a stepladder fastens a light track under the roof eave along a stucco side wall.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM (17).jpeg"
+    },
+    {
+      "file": "public/images/originals/two-workers-in-black-shirts-one-on-a-ladder-run-cable-up-a-w.jpeg",
+      "kind": "photo",
+      "caption": "Two workers in black shirts, one on a ladder, run cable up a white interior wall near a control box.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.34 AM (5).jpeg"
+    },
+    {
+      "file": "public/images/originals/installer-stands-on-a-ladder-beside-a-stucco-wall-attaching-.jpeg",
+      "kind": "photo",
+      "caption": "Installer stands on a ladder beside a stucco wall, attaching a light track beneath the tile roof eave.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.34 AM (1).jpeg"
+    },
+    {
+      "file": "public/images/originals/two-installers-work-on-a-tiled-roof-beside-a-dormer-vent-fit.jpeg",
+      "kind": "photo",
+      "caption": "Two installers work on a tiled roof beside a dormer vent, fitting a light track under the eave.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM (13).jpeg"
+    },
+    {
+      "file": "public/images/originals/installer-on-a-ladder-reaches-up-to-mount-a-light-track-unde.jpeg",
+      "kind": "photo",
+      "caption": "Installer on a ladder reaches up to mount a light track under the eave of a stucco house.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.34 AM (3).jpeg"
+    },
+    {
+      "file": "public/images/originals/single-story-house-at-dusk-with-white-roofline-lights-along-.jpeg",
+      "kind": "photo",
+      "caption": "Single-story house at dusk with white roofline lights along the gables and eaves, plus inflatable Halloween decorations on the lawn.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM (3).jpeg"
+    },
+    {
+      "file": "public/images/originals/house-at-night-with-multicolour-roofline-lights-glowing-on-t.jpeg",
+      "kind": "photo",
+      "caption": "House at night with multicolour roofline lights glowing on the gables and eaves, with Halloween inflatables on the front lawn.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM (1).jpeg"
+    },
+    {
+      "file": "public/images/originals/front-of-a-house-at-dusk-with-warm-white-roofline-lights-tra.jpeg",
+      "kind": "photo",
+      "caption": "Front of a house at dusk with warm white roofline lights tracing the gables, eaves and porch beam.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM (5).jpeg"
+    },
+    {
+      "file": "public/images/originals/close-view-of-garage-gables-at-night-with-red-green-and-whit.jpeg",
+      "kind": "photo",
+      "caption": "Close view of garage gables at night with red, green and white lights along the roof edge.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM (7).jpeg"
+    },
+    {
+      "file": "public/images/originals/installer-in-a-black-shirt-stands-on-a-small-ladder-working-.jpeg",
+      "kind": "photo",
+      "caption": "Installer in a black shirt stands on a small ladder, working on the eave of a stucco house.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.34 AM.jpeg"
+    },
+    {
+      "file": "public/images/originals/house-at-dusk-with-white-roofline-lights-on-every-gable-and-.jpeg",
+      "kind": "photo",
+      "caption": "House at dusk with white roofline lights on every gable and eave, and a Halloween skeleton display on the lawn.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM (2).jpeg"
+    },
+    {
+      "file": "public/images/originals/angled-night-view-of-a-house-with-multicolour-roofline-light.jpeg",
+      "kind": "photo",
+      "caption": "Angled night view of a house with multicolour roofline lights, tree branches in front and Halloween decorations by the driveway.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM (6).jpeg"
+    },
+    {
+      "file": "public/images/originals/house-at-night-with-soft-multicolour-roofline-lights-along-t.jpeg",
+      "kind": "photo",
+      "caption": "House at night with soft multicolour roofline lights along the gables and porch, and Halloween decorations on the lawn.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "WhatsApp Image 2026-10-17 at 11.49.33 AM (4).jpeg"
+    },
+    {
+      "file": "public/images/originals/covered-front-patio-at-night-with-red-white-and-blue-rooflin.png",
+      "kind": "photo",
+      "caption": "Covered front patio at night with red, white and blue roofline lights and purple light over the concrete driveway.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "holidays-events-07.png"
+    },
+    {
+      "file": "public/images/originals/red-green-and-white-lights-trace-the-roofline-and-garage-doo.png",
+      "kind": "photo",
+      "caption": "Red, green and white lights trace the roofline and garage door trim of a stucco house at night.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "holidays-events-06.png"
+    },
+    {
+      "file": "public/images/originals/two-story-stucco-home-at-night-with-red-green-and-white-ligh.png",
+      "kind": "photo",
+      "caption": "Two-story stucco home at night with red, green and white lights outlining every roofline and garage gable.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "holidays-events-10.png"
+    },
+    {
+      "file": "public/images/originals/single-story-home-at-dusk-with-roofline-lights-glowing-purpl.png",
+      "kind": "photo",
+      "caption": "Single-story home at dusk with roofline lights glowing purple, red and warm white above an open garage.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "holidays-events-04.png"
+    },
+    {
+      "file": "public/images/originals/desert-style-home-with-red-green-and-white-roofline-lights-r.png",
+      "kind": "photo",
+      "caption": "Desert-style home with red, green and white roofline lights reflecting in a pool, a lit Christmas tree inside.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "holidays-events-05.png"
+    },
+    {
+      "file": "public/images/originals/two-story-house-at-night-with-rainbow-colored-roofline-light.png",
+      "kind": "photo",
+      "caption": "Two-story house at night with rainbow-colored roofline lights washing the siding and garage doors in bright color.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "holidays-events-01.png"
+    },
+    {
+      "file": "public/images/originals/two-story-home-at-dusk-with-multicolor-roofline-lights-a-law.png",
+      "kind": "photo",
+      "caption": "Two-story home at dusk with multicolor roofline lights, a lawn in front and a deep blue sky.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "holidays-events-02.png"
+    },
+    {
+      "file": "public/images/originals/stucco-home-at-night-with-warm-white-roofline-lights-and-red.png",
+      "kind": "photo",
+      "caption": "Stucco home at night with warm white roofline lights and red accent glow on the walls and arched entry.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "holidays-events-03.png"
+    },
+    {
+      "file": "public/images/originals/spanish-style-home-at-night-with-multicolor-lights-outlining.png",
+      "kind": "photo",
+      "caption": "Spanish-style home at night with multicolor lights outlining rooflines and a round tower, plus lit landscaping.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "holidays-events-08.png"
+    },
+    {
+      "file": "public/images/originals/spanish-style-home-at-night-with-red-and-blue-roofline-light.png",
+      "kind": "photo",
+      "caption": "Spanish-style home at night with red and blue roofline lights and a bright pink wash across the stucco walls.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "holidays-events-09.png"
+    },
+    {
+      "file": "public/images/originals/two-crew-members-in-black-uniforms-hold-a-white-mounting-tra.jpg",
+      "kind": "photo",
+      "caption": "Two crew members in black uniforms hold a white mounting track outside a tile-roofed stucco house in daylight.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07650.jpg"
+    },
+    {
+      "file": "public/images/originals/a-worker-on-a-ladder-holds-a-white-mounting-track-up-to-the-.jpg",
+      "kind": "photo",
+      "caption": "A worker on a ladder holds a white mounting track up to the eave above a garage door while.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07678.jpg"
+    },
+    {
+      "file": "public/images/originals/a-worker-on-a-ladder-reaches-up-to-fit-a-white-track-along-t.jpg",
+      "kind": "photo",
+      "caption": "A worker on a ladder reaches up to fit a white track along the eave above a stucco garage.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07686.jpg"
+    },
+    {
+      "file": "public/images/originals/a-worker-on-a-ladder-holds-a-white-track-piece-against-the-e.jpg",
+      "kind": "photo",
+      "caption": "A worker on a ladder holds a white track piece against the eave above a garage door as a teammate.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07679.jpg"
+    },
+    {
+      "file": "public/images/originals/two-crew-members-in-black-polos-and-caps-talk-on-a-walkway-b.jpg",
+      "kind": "photo",
+      "caption": "Two crew members in black polos and caps talk on a walkway beside a tile-roofed stucco house.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07651.jpg"
+    },
+    {
+      "file": "public/images/originals/a-crew-member-in-a-cap-carries-a-long-white-track-piece-alon.jpg",
+      "kind": "photo",
+      "caption": "A crew member in a cap carries a long white track piece along a walkway lined with rose bushes.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07653.jpg"
+    },
+    {
+      "file": "public/images/originals/a-worker-on-a-ladder-holds-a-white-track-piece-up-under-the-.jpg",
+      "kind": "photo",
+      "caption": "A worker on a ladder holds a white track piece up under the roofline eave above a garage while.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07684.jpg"
+    },
+    {
+      "file": "public/images/originals/a-worker-stretches-from-a-ladder-to-place-a-white-track-alon.jpg",
+      "kind": "photo",
+      "caption": "A worker stretches from a ladder to place a white track along the eave above a garage door.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07685.jpg"
+    },
+    {
+      "file": "public/images/originals/two-crew-members-in-black-polos-walk-a-garden-path-beside-a-.jpg",
+      "kind": "photo",
+      "caption": "Two crew members in black polos walk a garden path beside a stucco house, one carrying a white track.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07652.jpg"
+    },
+    {
+      "file": "public/images/originals/three-crew-members-prepare-lighting-track-beside-a-folding-l.jpg",
+      "kind": "photo",
+      "caption": "Three crew members prepare lighting track beside a folding ladder, an open cardboard box and a garage door.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07646.jpg"
+    },
+    {
+      "file": "public/images/originals/a-crew-member-in-a-black-cap-inspects-white-track-pieces-whi.jpg",
+      "kind": "photo",
+      "caption": "A crew member in a black cap inspects white track pieces while a coworker photographs the roofline behind him.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07656.jpg"
+    },
+    {
+      "file": "public/images/originals/a-worker-on-a-ladder-holds-a-white-track-strip-up-to-the-eav.jpg",
+      "kind": "photo",
+      "caption": "A worker on a ladder holds a white track strip up to the eave above a garage door.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07681.jpg"
+    },
+    {
+      "file": "public/images/originals/a-worker-on-a-ladder-reaches-a-white-track-strip-toward-the-.jpg",
+      "kind": "photo",
+      "caption": "A worker on a ladder reaches a white track strip toward the stucco eave while a coworker steadies the ladder.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07680.jpg"
+    },
+    {
+      "file": "public/images/originals/a-smiling-crew-member-holds-a-white-track-piece-while-a-cowo.jpg",
+      "kind": "photo",
+      "caption": "A smiling crew member holds a white track piece while a coworker takes a photo near a rose bush.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07657.jpg"
+    },
+    {
+      "file": "public/images/originals/a-crew-member-in-a-branded-black-polo-looks-up-at-the-roofli.jpg",
+      "kind": "photo",
+      "caption": "A crew member in a branded black polo looks up at the roofline.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07669.jpg"
+    },
+    {
+      "file": "public/images/originals/one-crew-member-checks-white-track-pieces-while-another-uses.jpg",
+      "kind": "photo",
+      "caption": "One crew member checks white track pieces while another uses a phone on a garden path by a stucco home.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07655.jpg"
+    },
+    {
+      "file": "public/images/originals/a-young-worker-in-a-branded-black-polo-holds-a-white-lightin.jpg",
+      "kind": "photo",
+      "caption": "A young worker in a branded black polo holds a white lighting track in front of hedges and a tile-roof.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07632.jpg"
+    },
+    {
+      "file": "public/images/originals/three-crew-members-in-black-polo-shirts-stand-with-arms-cros.jpg",
+      "kind": "photo",
+      "caption": "Three crew members in black polo shirts stand with arms crossed in front of a tile-roofed stucco house.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07624.jpg"
+    },
+    {
+      "file": "public/images/originals/two-crew-members-in-black-polos-handle-a-white-aluminum-trac.jpg",
+      "kind": "photo",
+      "caption": "Two crew members in black polos handle a white aluminum track channel on a front lawn beside a tile roof.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07630.jpg"
+    },
+    {
+      "file": "public/images/originals/three-crew-members-in-black-polos-and-caps-stand-arms-crosse.jpg",
+      "kind": "photo",
+      "caption": "Three crew members in black polos and caps stand arms crossed in front of a tile-roofed house with garage.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07618.jpg"
+    },
+    {
+      "file": "public/images/originals/three-smiling-crew-members-in-matching-black-polos-pose-with.jpg",
+      "kind": "photo",
+      "caption": "Three smiling crew members in matching black polos pose with arms crossed outside a stucco home with tile roof.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07619.jpg"
+    },
+    {
+      "file": "public/images/originals/a-crew-member-holds-a-white-aluminum-track-channel-while-a-t.jpg",
+      "kind": "photo",
+      "caption": "A crew member holds a white aluminum track channel while a teammate bends over working on the lawn.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "DSC07631.jpg"
+    },
+    {
+      "file": "public/images/originals/single-story-stucco-house-in-daylight-with-tile-roof-gray-ga.jpeg",
+      "kind": "photo",
+      "caption": "Single-story stucco house in daylight with tile roof, gray garage door and a skeleton dinosaur decoration on the lawn.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "before",
+      "source": "WhatsApp Image 2026-10-17 at 11.49.34 AM (7).jpeg"
+    },
+    {
+      "file": "public/images/originals/three-crew-members-prepare-for-an-install-beside-a-garage-wi.jpg",
+      "kind": "photo",
+      "caption": "Three crew members prepare for an install beside a garage, with a ladder.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "before",
+      "source": "DSC07644.jpg"
+    },
+    {
+      "file": "public/images/originals/crew-members-set-up-on-a-driveway-with-a-folding-ladder.jpg",
+      "kind": "photo",
+      "caption": "Crew members set up on a driveway with a folding ladder.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "before",
+      "source": "DSC07645.jpg"
+    },
+    {
+      "file": "public/images/originals/one-worker-pulls-white-track-pieces-from-a-cardboard-box-whi.jpg",
+      "kind": "photo",
+      "caption": "One worker pulls white track pieces from a cardboard box while another holds a rail by the ladder.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "before",
+      "source": "DSC07647.jpg"
+    },
+    {
+      "file": "public/images/originals/crew-members-unpack-and-handle-white-light-track-beside-a-la.jpg",
+      "kind": "photo",
+      "caption": "Crew members unpack and handle white light track beside a ladder at a stucco garage with a tile roof.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "before",
+      "source": "DSC07642.jpg"
+    },
+    {
+      "file": "public/images/originals/two-crew-members-work-in-a-driveway-with-a-ladder-an-open-bo.jpg",
+      "kind": "photo",
+      "caption": "Two crew members work in a driveway with a ladder, an open box and white light track by a garage.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "before",
+      "source": "DSC07643.jpg"
+    },
+    {
+      "file": "public/images/originals/three-crew-members-in-black-polos-prepare-a-ladder-and-white.jpg",
+      "kind": "photo",
+      "caption": "Three crew members in black polos prepare a ladder and white track beside a garage on a sunny residential street.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "before",
+      "source": "DSC07641.jpg"
+    },
+    {
+      "file": "public/images/originals/a-worker-on-a-ladder-holds-a-white-mounting-channel-against-.jpg",
+      "kind": "photo",
+      "caption": "A worker on a ladder holds a white mounting channel against the eave above a garage while a coworker steadies.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "before",
+      "source": "DSC07682.jpg"
+    },
+    {
+      "file": "public/images/originals/a-technician-on-a-ladder-lifts-a-white-track-up-to-the-stucc.jpg",
+      "kind": "photo",
+      "caption": "A technician on a ladder lifts a white track up to the stucco eave above a brown garage door.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "before",
+      "source": "DSC07683.jpg"
+    },
+    {
+      "file": "public/images/originals/crew-members-in-black-uniforms-gather-around-a-stepladder-wi.jpg",
+      "kind": "photo",
+      "caption": "Crew members in black uniforms gather around a stepladder with light track and cable outside a stucco home garage.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "before",
+      "source": "DSC07640.jpg"
+    },
+    {
+      "file": "public/images/originals/two-crew-members-check-a-phone-and-white-track-pieces-on-a-w.jpg",
+      "kind": "photo",
+      "caption": "Two crew members check a phone and white track pieces on a walkway beside rose bushes and a stucco house.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "before",
+      "source": "DSC07654.jpg"
+    },
+    {
+      "file": "public/images/originals/a-worker-in-a-black-polo-handles-a-white-lighting-track-agai.jpg",
+      "kind": "photo",
+      "caption": "A worker in a black polo handles a white lighting track against a folding ladder in front of a garage.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "before",
+      "source": "DSC07668.jpg"
+    },
+    {
+      "file": "public/images/originals/a-crew-member-carries-white-track-toward-a-ladder-at-the-gar.jpg",
+      "kind": "photo",
+      "caption": "A crew member carries white track toward a ladder at the garage while a coworker looks up at the roofline.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "before",
+      "source": "DSC07633.jpg"
+    },
+    {
+      "file": "public/images/originals/three-crew-members-pull-white-track-pieces-from-a-cardboard-.jpg",
+      "kind": "photo",
+      "caption": "Three crew members pull white track pieces from a cardboard box on a front lawn near a tile-roof home.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "before",
+      "source": "DSC07627.jpg"
+    },
+    {
+      "file": "public/images/originals/crew-members-sort-through-a-cardboard-box-of-lighting-suppli.jpg",
+      "kind": "photo",
+      "caption": "Crew members sort through a cardboard box of lighting supplies beside hedges and rose bushes in front of a stucco.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": "before",
+      "source": "DSC07626.jpg"
     }
   ],
-  "skipped": []
+  "skipped": [
+    {
+      "kind": "video",
+      "filename": "WhatsApp Video 2026-10-17 at 11.49.31 AM (1).mp4",
+      "caption": "House at night with blue lights outlining the roofline gables.",
+      "why": "this repo has no scripts/transcode-videos.mjs yet (template sync pending)"
+    },
+    {
+      "kind": "video",
+      "filename": "WhatsApp Video 2026-10-17 at 11.49.31 AM.mp4",
+      "caption": "House at dusk with warm white roofline lights along the gables, a Halloween dinosaur archway.",
+      "why": "this repo has no scripts/transcode-videos.mjs yet (template sync pending)"
+    },
+    {
+      "kind": "video",
+      "filename": "WhatsApp Video 2026-10-17 at 11.49.32 AM.mp4",
+      "caption": "Clip of a house at night with roofline lights changing between blue, red and white beside Halloween decorations.",
+      "why": "this repo has no scripts/transcode-videos.mjs yet (template sync pending)"
+    }
+  ]
 }

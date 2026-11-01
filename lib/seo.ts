@@ -96,7 +96,7 @@ export function defaultDescription(args: Pick<BuildMetadataArgs, 'kind' | 'servi
     case 'how':
       return `How permanent lighting installation works with ${displayName} in ${where()}: request a quote, get a custom design, have the track mounted, and control it by phone.`
     case 'gallery':
-      return `${serviceName()} design ideas for ${where()} homes: concept renderings of warm white and full color rooflines, not photos of completed jobs.`
+      return `${serviceName()} by ${displayName}: photos of our own installs in warm white and full color, plus our crew mounting the track along the eaves.`
     case 'why':
       return `Why ${displayName} for ${lower} in ${where()} and the Inland Empire: professionally installed, app-controlled, warm white and full color.`
     case 'service-areas':

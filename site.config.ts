@@ -303,44 +303,57 @@ const siteConfig = {
     },
   ],
 
-  // The hero and the first gallery image are the client's own install photos
-  // (intake 4484.jpg, 4485.jpg; PR #1). The rest of the gallery is AI design
-  // renderings, registered in placeholders.json as "Rendering (AI, labeled)"; each
-  // renders with a visible "Design rendering" label (verify check 23). Crew photos
-  // are real (supplied by Will).
+  // Every image here is the client's own photograph from the ops intake (ASSETS.json).
+  // Hero: 4484.jpg (kept, PR #1). Gallery: finished night installs first, then
+  // installation-in-progress shots. The template has no before/after or separate
+  // process slot, so the install shots close out the gallery. Crew: DSC07619
+  // (group shot leads), DSC07669, DSC07630. about stays null: no page renders it.
   images: {
     hero: 'backyard-patio-at-dusk-with-string-lights-strung-overhead-an.jpg',
     about: null,
     gallery: [
+      'two-story-house-at-night-with-rainbow-colored-roofline-light.png',
+      'spanish-style-home-at-night-with-multicolor-lights-outlining.png',
+      'two-story-stucco-home-at-night-with-red-green-and-white-ligh.png',
+      'desert-style-home-with-red-green-and-white-roofline-lights-r.png',
+      'house-at-night-with-blue-and-white-roofline-lights-outlining.jpeg',
+      'covered-front-patio-at-night-with-red-white-and-blue-rooflin.png',
+      'stucco-home-at-night-with-warm-white-roofline-lights-and-red.png',
+      'single-story-home-at-dusk-with-roofline-lights-glowing-purpl.png',
+      'spanish-style-home-at-night-with-red-and-blue-roofline-light.png',
+      'two-story-home-at-dusk-with-multicolor-roofline-lights-a-law.png',
+      'red-green-and-white-lights-trace-the-roofline-and-garage-doo.png',
+      'single-story-house-at-night-with-red-green-and-white-lights-.jpeg',
+      'close-view-of-warm-white-lights-running-along-tile-roof-edge.jpeg',
+      'close-up-at-night-of-warm-white-lights-glowing-in-a-track-un.jpeg',
       'covered-patio-at-dusk-with-lights-installed-along-the-cover-.jpg',
-      'rendering-spanish-style-multicolor.jpg',
-      'rendering-two-story-rainbow.jpg',
-      'rendering-backyard-pool-holiday.jpg',
-      'rendering-purple-and-red-ranch.jpg',
-      'rendering-red-and-white-two-story.jpg',
-      'rendering-magenta-covered-patio.jpg',
+      'two-installers-sit-on-a-tile-roof-fastening-light-track-unde.jpeg',
+      'installer-on-a-stepladder-fastens-a-light-track-along-the-ea.jpeg',
+      'a-worker-stretches-from-a-ladder-to-place-a-white-track-alon.jpg',
+      'three-crew-members-in-black-polos-prepare-a-ladder-and-white.jpg',
     ],
-    crew: ['kalights-crew-group-dsc07608.jpg', 'kalights-crew-unpacking-dsc07628.jpg', 'kalights-crew-prep-dsc07640.jpg'],
+    crew: [
+      'three-smiling-crew-members-in-matching-black-polos-pose-with.jpg',
+      'a-crew-member-in-a-branded-black-polo-looks-up-at-the-roofli.jpg',
+      'two-crew-members-in-black-polos-handle-a-white-aluminum-trac.jpg',
+    ],
   },
 
-  // Scene names, sub-labels, colors, and glow tints match the current site. The 8 scene
-  // images are the current site's own scene images, relabeled: they are shown as a sample
-  // home with a visible "Sample home, design rendering" label, never as a Kalights job.
-  // Origin is unproven (no metadata of any kind); registered in placeholders.json with the
-  // Rendering status. Swap in photographs of a real install and the label follows the
-  // register (see the asset provenance and client checklist under docs/, item B1.4).
+  // Scene names, sub-labels, colors, and glow tints match the current site. Every scene
+  // is now a real photograph of one Kalights install (the WhatsApp 2026-10-17 intake
+  // series: the same house in warm white, white, red-green-white, multicolor, and in
+  // daylight with the lights off), so no "design rendering" label renders. Halloween,
+  // Fourth of July and Game Day were dropped with their AI renderings: no client photo
+  // shows those colors. Add them back with a photo of the same house in that scene.
   visualizer: {
     mode: 'photo',
     defaultScene: 'warm-white',
     scenes: [
-      { key: 'warm-white', name: 'Warm White', description: 'Everyday elegance', colors: ['#FFD8A6'], glow: '#FFC46B', image: 'rendering-sample-home-warm-white.jpg' },
-      { key: 'cool-white', name: 'Cool White', description: 'Crisp & modern', colors: ['#EAF2FF'], glow: '#BBD9FF', image: 'rendering-sample-home-cool-white.jpg' },
-      { key: 'christmas', name: 'Christmas', description: 'Red & green classic', colors: ['#FF3B3B', '#22C55E'], glow: '#FF5A5A', image: 'rendering-sample-home-christmas.jpg' },
-      { key: 'halloween', name: 'Halloween', description: 'Orange & purple', colors: ['#FF7A18', '#8B5CF6'], glow: '#FF8A3D', image: 'rendering-sample-home-halloween.jpg' },
-      { key: 'fourth-of-july', name: 'Fourth of July', description: 'Red, white & blue', colors: ['#FF4141', '#F4F6FB', '#3B82F6'], glow: '#5B9BFF', image: 'rendering-sample-home-fourth-of-july.jpg' },
-      { key: 'game-day', name: 'Game Day', description: 'Rep your team', colors: ['#1E63FF', '#FACC15'], glow: '#FACC15', image: 'rendering-sample-home-game-day.jpg' },
-      { key: 'party', name: 'Party', description: 'Full-color chase', colors: ['#FF3B3B', '#FB923C', '#FACC15', '#22C55E', '#2DD4FF', '#6366F1', '#D946EF'], glow: '#FF3B3B', glowCycle: true, image: 'rendering-sample-home-party.jpg' },
-      { key: 'lights-off', name: 'Lights Off', description: 'Tap any scene to relight', colors: ['#1A1D26'], glow: null, image: 'rendering-sample-home-lights-off.jpg' },
+      { key: 'warm-white', name: 'Warm White', description: 'Everyday elegance', colors: ['#FFD8A6'], glow: '#FFC46B', image: 'house-at-night-with-warm-white-lights-outlining-the-roof-gab.jpeg' },
+      { key: 'cool-white', name: 'Cool White', description: 'Crisp & modern', colors: ['#EAF2FF'], glow: '#BBD9FF', image: 'single-story-house-at-dusk-with-white-roofline-lights-along-.jpeg' },
+      { key: 'christmas', name: 'Christmas', description: 'Red & green classic', colors: ['#FF3B3B', '#22C55E'], glow: '#FF5A5A', image: 'same-house-at-night-with-multicolor-roofline-lights-in-red-g.jpeg' },
+      { key: 'party', name: 'Party', description: 'Full-color chase', colors: ['#FF3B3B', '#FB923C', '#FACC15', '#22C55E', '#2DD4FF', '#6366F1', '#D946EF'], glow: '#FF3B3B', glowCycle: true, image: 'house-at-night-with-soft-multicolour-roofline-lights-along-t.jpeg' },
+      { key: 'lights-off', name: 'Lights Off', description: 'Tap any scene to relight', colors: ['#1A1D26'], glow: null, image: 'single-story-stucco-house-in-daylight-with-tile-roof-gray-ga.jpeg' },
     ],
   },
 

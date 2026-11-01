@@ -46,7 +46,7 @@ export function GET() {
     '## Pages',
     `- [How It Works](${url('/how-it-works')})`,
     `- [Request a Quote](${url('/quote')})`,
-    `- [Design Ideas (concept renderings)](${url('/gallery')})`,
+    `- [Design Ideas (install photos)](${url('/gallery')})`,
     `- [Why ${c.displayName}](${url('/why-kalights')})`,
     `- [FAQ](${url('/faq')})`,
     `- [Privacy Policy](${url('/privacy-policy')})`,

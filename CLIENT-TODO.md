@@ -2,6 +2,7 @@
 
 ## Questions for Jacob
 
+- Could the client re-send photo_510.jpg (the round black and gold "Certified Installer / Permanent Lighting" badge)? The intake link for it returns 404 and the intake did not download it, so it is not on the site yet. The wide certification banner (photo_511.jpg) is now in the gallery.
 - Could the client photograph the same house as the color picker (the one in the WhatsApp 2026-10-17 photos) in Halloween (orange and purple), Fourth of July (red, white and blue) and Game Day (blue and yellow) scenes? Those three scenes are off the homepage color picker until there is a real photo for each.
 - What hours can you pick up the phone? (hours unknown, so no hours are shown)
 - How many years has Kalights been in business? (not shown)

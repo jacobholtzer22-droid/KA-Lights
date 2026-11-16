@@ -331,6 +331,7 @@ const siteConfig = {
       'installer-on-a-stepladder-fastens-a-light-track-along-the-ea.jpeg',
       'a-worker-stretches-from-a-ladder-to-place-a-white-track-alon.jpg',
       'three-crew-members-in-black-polos-prepare-a-ladder-and-white.jpg',
+      'certified-installer-banner-permanent-lighting-systems.jpg',
     ],
     crew: [
       'three-smiling-crew-members-in-matching-black-polos-pose-with.jpg',

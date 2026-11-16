@@ -5,6 +5,7 @@ import Img from '@/components/Img'
 import JsonLd from '@/components/JsonLd'
 import PageHeader from '@/components/PageHeader'
 import ServiceGrid from '@/components/ServiceGrid'
+import { StrataBanner } from '@/components/StrataCertification'
 import { config, getService } from '@/lib/config'
 import { loadContent, readFrontmatter } from '@/lib/content'
 import { pageH1, pageIntro } from '@/lib/headings'
@@ -53,6 +54,10 @@ export default async function ServicePage({ params }: { params: { slug: string }
             <div className="max-w-sm overflow-hidden rounded-card lg:max-w-none">
               <Img name={service.image} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 24rem, 100vw" className="h-auto w-full" />
             </div>
+          )}
+          {/* Strata certification is for permanent lighting systems, so the banner shows only on that service. */}
+          {service.slug === 'permanent-architectural-lighting' && (
+            <StrataBanner className="max-w-sm lg:max-w-none" sizes="(min-width: 1024px) 33vw, (min-width: 640px) 24rem, 100vw" />
           )}
           {(service.priceFrom !== null || service.priceNote) && (
             <div className="rounded-card border border-line bg-surface p-6">

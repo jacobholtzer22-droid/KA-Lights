@@ -665,6 +665,33 @@
       "service": null,
       "beforeAfter": "before",
       "source": "DSC07626.jpg"
+    },
+    {
+      "file": "public/images/originals/logo.jpg",
+      "kind": "logo",
+      "caption": "Black and gold certification banner for a permanent lighting systems installer.",
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "photo_511.jpg"
+    },
+    {
+      "file": "public/images/originals/5274.jpg",
+      "kind": "photo",
+      "caption": null,
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "5274.jpg"
+    },
+    {
+      "file": "public/images/originals/5275.jpg",
+      "kind": "photo",
+      "caption": null,
+      "heroCandidate": false,
+      "service": null,
+      "beforeAfter": null,
+      "source": "5275.jpg"
     }
   ],
   "skipped": [

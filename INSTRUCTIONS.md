@@ -1,9 +1,15 @@
-Kalights (slug kalights-1789175572458, repo KA-Lights). Photos-only update: bring the client's newly filed intake photos and videos onto the site. The intake now holds 74 photos and 3 videos (the Photo desk captioned them; captions are in the intake files list). Scope:
-1. Keep 4484.jpg as the hero (it is already the hero; leave it).
-2. Replace every remaining placeholder or stock image with the client's real photos. In particular, the three crew placeholders (placeholder-crew-1/2/3.jpg) must be replaced with real crew shots from the DSC07xxx series (e.g. DSC07619.jpg, DSC07624.jpg, DSC07618.jpg: crew in black polos in front of a tile-roofed stucco house). Use DSC07669.jpg or DSC07632.jpg for the About image if an about slot exists.
-3. Build out the gallery and a Recent Work section from the finished night shots: the WhatsApp Image 2026-10-17 roofline lighting photos (white, blue, multicolor roofline lights) and the holidays-events-01 through -10 PNGs. Include installation-in-progress shots (installers on ladders fastening light track under eaves, two installers on a tile roof) as a smaller "How we install" or process set if the template has a slot; otherwise put a handful in the gallery.
-4. Use the one obvious before/after pair if the template supports it: WhatsApp Image 2026-10-17 at 11.49.34 AM (7).jpeg (house in daylight, before) with WhatsApp Image 2026-10-17 at 11.49.33 AM (8).jpeg (same style house at night with red, green and white roofline lights, after). Skip the pair if you cannot confirm it is the same house.
-5. Add the 3 videos (WhatsApp Video 2026-10-17 at 11.49.31 AM.mp4, ... 11.49.31 AM (1).mp4, ... 11.49.32 AM.mp4) to the gallery as video items. Do NOT set a hero video; the hero stays the 4484.jpg photo.
-6. Alt text: use each file's intake caption word for word, no town, street or customer names added. Do not use more than roughly 30 photos on the page set; pick the sharpest, skip near-duplicates (the DSC07678 through DSC07686 ladder shots are near-duplicates; use at most two).
-7. Delete every stock and placeholder image file you replace and their placeholders.json entries.
-Do not touch copy, services, prices, phone, slug, legalName, primaryCity, primaryState, domain, design or indexing.json (noindex stays true). Open the PR as usual; the merge waits for Jacob's Push.
+Jacob's words: "The badges are trust badges, not gallery photos. Take the banner out of the gallery (back to 19). Round badge near the top of the homepage with the trust points and in the footer, banner on the permanent lighting section, alt text 'Strata Certified Installer', gallery untouched."
+
+Work from current main. The gallery on main has 19 photos and must stay exactly those 19, untouched. (An earlier run, closed PR #4, added a Strata banner to the gallery; that is not wanted.)
+
+Two new intake photos are the trust badges: 5274.jpg and 5275.jpg. Look at both: one is the ROUND black and gold "Strata Certified Installer / Permanent Lighting" badge (square image), the other is the WIDE black and gold "Strata Certified Installer" banner. Say in the report which file is which. Do not use photo_511.jpg (an earlier copy of the banner wrongly filed as a logo) unless one of the two new files will not download; if a file will not download, say so plainly and do not substitute.
+
+Place them:
+- Round badge: near the top of the homepage, with the trust points (beside or within the trust strip under the hero), and in the footer. Sized as a badge, crisp, not stretched.
+- Wide banner: on the permanent lighting section of the homepage, and on the permanent lighting service page if there is one.
+- Alt text: "Strata Certified Installer". If the verify gate requires unique alts of 15+ characters across images, use "Strata Certified Installer badge" and "Strata Certified Installer banner" and say so in the report.
+- Never use either image as the site logo, favicon, hero or a gallery photo. Do not change the existing logo.
+
+Change nothing else: no copy, no tracking, no form, no gallery. All verify checks must pass.
+
+In the BUILD-REPORT: which file is the badge and which the banner; every place each appears; gallery photo count before and after (must be 19 and 19).

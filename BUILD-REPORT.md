@@ -1,37 +1,23 @@
-# Build report: kalights-1789175572458 (site_update, Strata trust badges)
+# BUILD-REPORT: site_update (tracking install), kalights-1789175572458
 
-## Which file is which
+**Outcome: no code change. The Google tag requested is already installed on this site, with the same tag ID and both conversion labels, and the gate verifies it on every page (check 24). The gate is green, 24/24.**
 
-- **5274.jpg** (2048x2048, square): the ROUND black and gold badge, "Certified Installer / Permanent Lighting", Strata and Kalights in the centre.
-- **5275.jpg** (2048x1144, wide): the WIDE black and gold banner, "Kalights / Certified Installer / Permanent Lighting Systems" with the Strata roundel on the left.
+The instructions say this repo's template "predates tracking support". It doesn't. KA Lights already has its own Google Ads setup, and it carries exactly the values in Part 2:
 
-Both files downloaded. photo_511.jpg was not used. It arrived as `public/images/originals/logo.jpg` (ASSETS.json `kind: logo`), and I viewed it: it is a lower-resolution copy of the wide banner, not a logo. I deleted it from `originals/` without using it, so it is not processed or committed. The site logo is unchanged: it is still the text wordmark from `config.displayName`.
+| INSTRUCTIONS.md `tracking` | Already in `site.config.ts` `googleAds` |
+|---|---|
+| `googleAdsId: 'AW-18468343968'` | `tagId: 'AW-18468343968'` |
+| `conversions.form: 'AW-18468343968/Tdk_CPCttYIdEKChsuZE'` | `quoteFormSubmitLabel: 'AW-18468343968/Tdk_CPCttYIdEKChsuZE'` |
+| `conversions.call: 'AW-18468343968/HUU6CL2ztYIdEKChsuZE'` | `clickToCallLabel: 'AW-18468343968/HUU6CL2ztYIdEKChsuZE'` |
 
-## Where each one appears
+How it works now:
+- `components/GoogleAdsTag.tsx` is rendered by `app/layout.tsx` on every page. It loads gtag.js and configures AW-18468343968.
+- Call conversion: `components/TelConversion.tsx` listens at the document level for clicks on any `tel:` link and fires `clickToCallLabel`.
+- Form conversion: `components/LeadForm.tsx:79` fires `quoteFormSubmitLabel` only on a 2xx response from the contact endpoint. The form is on /, /contact and /quote, and all three are covered.
+- Verified in this run's build: `out/index.html`, `out/contact.html` and `out/quote.html` (and all 18 pages, per check 24) load `googletagmanager.com/gtag/js?id=AW-18468343968`. The form label ships in `out/_next/static/chunks/164-*.js`.
+- None of it loads in a PREVIEW build (`TRACKING_MODE` comes from `next.config.mjs`), so a preview cannot report fabricated conversions.
 
-A new component, `components/StrataCertification.tsx`, holds both filenames and renders them through `<Img>`. That means the srcset and alt come from the manifest, sized as a badge with `object-contain`, so nothing is stretched.
-
-- **Round badge (5274.jpg)**
-  - Homepage trust strip under the hero (`components/TrustStrip.tsx`), to the left of the trust points (phone, 7 Inland Empire cities, app-controlled, year-round). It is 80px on phones and 96px from sm up.
-  - Site footer (`components/Footer.tsx`), under the brand blurb in the first column, at 96px. The footer is on all 18 built pages.
-- **Wide banner (5275.jpg)**
-  - Homepage "Why permanent lighting" section (`components/FeatureCards.tsx`), under the section heading and above the cards, at max-w-md.
-  - The Permanent Architectural Lighting service page (`app/services/[slug]/page.tsx`), in the sidebar under the service photo. It appears only for slug `permanent-architectural-lighting`.
-- Neither image is used as the logo, favicon, hero, a service image, or a gallery item.
-
-**Alt text:** check 11 requires every distinct image to have its own alt, so the two can't both use "Strata Certified Installer". I used **"Strata Certified Installer badge"** (5274.jpg) and **"Strata Certified Installer banner"** (5275.jpg).
-
-## Gallery
-
-`images.gallery` has **19 photos before and 19 after**. `site.config.ts` is not modified at all. The /gallery page shows the round badge only in the shared footer, not in the grid.
-
-## Changed files
-
-- New: `components/StrataCertification.tsx`, `public/images/originals/5274.jpg`, `public/images/originals/5275.jpg`, and their processed WebPs.
-- Edited: `components/TrustStrip.tsx`, `components/Footer.tsx`, `components/FeatureCards.tsx`, `app/services/[slug]/page.tsx`, `public/images/manifest.json` (two entries added).
-- Not changed: copy, tracking, the form, the gallery, the config, and the logo.
-
-## 1. `npm run verify` (first attempt)
+## 1. Verify output
 
 ```
 #   check                                                                   result  detail
@@ -65,15 +51,30 @@ A new component, `components/StrataCertification.tsx`, holds both filenames and 
 All checks passed.
 ```
 
+## 2. site.config.ts
+
+Unchanged by this run. The relevant block is `googleAds` (shown above). The full file is on the branch.
+
+## 3–5. Alt-text spot checks, design direction, templated-look fixes
+
+Not applicable. This is a tracking-only `site_update`; no content, images or design were touched.
+
 ## 6. UNRESOLVED
 
-Unchanged from the previous build: hours, yearsInBusiness, licenseNumber, insured and address are null (see CLIENT-TODO.md). Three videos were skipped by the intake because there is no transcoder yet.
+None new from this run.
 
 ## 7. INVENTED
 
-None. The site does not claim the Strata certification anywhere in text. It appears only as the client-supplied images and their alt text.
+Nothing. No values were added or changed.
 
-## 8. Notes on the template / for the human
+## 8. What is wrong, and why Part 1 was not applied
 
-- The ops intake filed photo_511.jpg (the banner) as `kind: logo` and saved it as `logo.jpg`. Fix that classification upstream, or the next run will be offered the banner as a logo again.
-- The config schema has no slot for certification badges, so the filenames are constants in `components/StrataCertification.tsx` and not in `site.config.ts`. If badges become common across clients, a `config.images.badges` field in the template would be the cleaner home. I did not edit `lib/config-schema.ts`.
+Doing Part 1 and Part 2 as written would have broken the site or the rules:
+
+1. **Conversions would double count.** A second tag (`components/GoogleTag.tsx`) next to the existing `GoogleAdsTag` loads gtag.js twice. Every `tel:` click would fire the call conversion twice, and every successful form submission would fire the form conversion twice, inflating the Ads account's numbers.
+2. **The new tag would fire in preview builds.** Unlike the existing `TRACKING_MODE` gate, the template `GoogleTag` has no preview check. A preview deploy would record conversions in the real Ads account. This site's check 24 would then fail any PREVIEW build.
+3. **Part 1 needs files that are forbidden in CI.** Step 3 edits `lib/config-schema.ts` and step 4 edits `scripts/verify.ts`; AGENT.md forbids both "without exception". Without the schema edit, Part 2 fails check 1: the schema object is `.strict()` and has no `tracking` key.
+4. **Check numbers collide.** In this repo, check 22 is already "city pages exist only for cities with a filled localDetail" and 24 is the Google Ads check. A new "check 22" would clash.
+5. **The check 22 snippet in INSTRUCTIONS.md is cut off.** It stops mid-block, with no closing braces and no `record(22, ...)` call, so it could not be pasted "exactly as given" anyway.
+
+**For Jacob / the platform:** the ops platform's `install_tracking` should treat a repo with a `googleAds` block (KA Lights, and any other site on this older tracking variant) as already installed when the IDs match, instead of sending a template backport. If you want KA Lights moved onto the template's `tracking` key anyway, do it in the template or by hand. It means replacing `googleAds`, `GoogleAdsTag`, `TelConversion`, the `LeadForm` call and check 24, not adding to them, and keeping the PREVIEW gate.

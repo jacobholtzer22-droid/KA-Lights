@@ -6,6 +6,7 @@ import { focusable, linkAccent, linkQuiet } from '@/lib/ui'
 import NavLink from './NavLink'
 import { PhoneIcon } from './icons'
 import Phone from './Phone'
+import { StrataBadge } from './StrataCertification'
 
 const columnHeading = 'font-heading text-step-0 font-semibold text-ink'
 /** 44px minimum tap target for the quick links, per row. */
@@ -30,6 +31,7 @@ export default function Footer() {
           <p className="mt-4 max-w-measure text-step--1 text-ink-soft">
             {siteCopy.footerBlurb} {config.tagline}
           </p>
+          <StrataBadge className="mt-6 h-24 w-24" />
         </div>
 
         <div>

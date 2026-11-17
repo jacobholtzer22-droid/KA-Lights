@@ -2,6 +2,7 @@ import { homeCopy } from '@/lib/page-content'
 import Eyebrow from './Eyebrow'
 import { FeatureIcon } from './icons'
 import Section, { type SectionTone } from './Section'
+import { StrataBanner } from './StrataCertification'
 
 /** "Why permanent lighting" cards. A card with no title (held copy) does not render. */
 export default function FeatureCards({ tone = 'base' }: { tone?: SectionTone } = {}) {
@@ -23,6 +24,7 @@ export default function FeatureCards({ tone = 'base' }: { tone?: SectionTone } =
             )}
           </h2>
         )}
+        <StrataBanner className="mx-auto mt-8 max-w-md" sizes="(min-width: 640px) 28rem, 100vw" />
       </div>
       {cards.length > 0 && (
         <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:[grid-template-columns:repeat(auto-fit,minmax(14rem,1fr))]">

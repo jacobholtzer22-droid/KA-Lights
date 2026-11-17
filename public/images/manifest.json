@@ -1,4 +1,26 @@
 {
+  "5274.jpg": {
+    "width": 2048,
+    "height": 2048,
+    "alt": "Strata Certified Installer badge",
+    "base": "5274",
+    "sizes": [
+      640,
+      1024,
+      1920
+    ]
+  },
+  "5275.jpg": {
+    "width": 2048,
+    "height": 1144,
+    "alt": "Strata Certified Installer banner",
+    "base": "5275",
+    "sizes": [
+      640,
+      1024,
+      1920
+    ]
+  },
   "a-crew-member-carries-white-track-toward-a-ladder-at-the-gar.jpg": {
     "width": 2400,
     "height": 1600,

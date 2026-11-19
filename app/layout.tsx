@@ -27,6 +27,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${headingFont.variable} ${bodyFont.variable}`} style={lightVars}>
+      <head>
+        <script defer src="https://www.alignandacquire.com/t/s/kalights-1789175572458.js"></script>
+      </head>
       <body className="flex min-h-screen flex-col bg-bg pb-[4.5rem] text-ink lg:pb-0">
         <a
           href="#main"

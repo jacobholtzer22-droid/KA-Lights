@@ -105,6 +105,9 @@ export default function Footer() {
             <Link href="/privacy-policy" className={linkQuiet}>
               Privacy Policy
             </Link>
+            <a href="#" data-aa-cookie-settings hidden className={linkQuiet}>
+              Cookie settings
+            </a>
             {instagram && (
               <a href={instagram} rel="noopener" target="_blank" className={linkQuiet}>
                 {handle(instagram)}

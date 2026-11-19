@@ -76,8 +76,10 @@ export default async function PrivacyPolicyPage() {
               No dollar value is attached to either action.
             </p>
             <p className="mt-4">
-              Nothing else on this site tracks you. There is no analytics product, no social media pixel, and no
-              advertising tag from any other company.
+              We count visits to this site without cookies: we log the page viewed, the site that linked here, ad campaign tags and an approximate location (country, region and city), and we never store your IP address.
+            </p>
+            <p className="mt-4">
+              If you click OK on the cookie banner, we also use PostHog to record how you use this site (clicks, scrolling and a replay of your visit, with anything you type hidden); you can change your choice at any time with the Cookie settings link at the bottom of every page, and if your browser sends a Global Privacy Control signal we leave this off.
             </p>
             <h2 className="mt-10 font-heading text-step-2 font-bold text-ink">How to opt out</h2>
             <p className="mt-4">
@@ -112,8 +114,10 @@ export default async function PrivacyPolicyPage() {
           <>
             <h2 className="mt-10 font-heading text-step-2 font-bold text-ink">Cookies and analytics</h2>
             <p className="mt-4">
-              This site does not set tracking cookies of its own. If analytics or advertising tags are added in the future,
-              this policy will be updated to describe them.
+              We count visits to this site without cookies: we log the page viewed, the site that linked here, ad campaign tags and an approximate location (country, region and city), and we never store your IP address.
+            </p>
+            <p className="mt-4">
+              If you click OK on the cookie banner, we also use PostHog to record how you use this site (clicks, scrolling and a replay of your visit, with anything you type hidden); you can change your choice at any time with the Cookie settings link at the bottom of every page, and if your browser sends a Global Privacy Control signal we leave this off.
             </p>
           </>
         )}
